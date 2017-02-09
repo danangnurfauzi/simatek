@@ -16,6 +16,8 @@ class Laporan extends MX_controller
 		{
 			redirect('auth/login');
 		}
+
+		$this->load->helper('laporan_helper');
 		
 	}
 
@@ -23,24 +25,27 @@ class Laporan extends MX_controller
 	{
 		switch ($_SESSION['roleId']) {
 			case '1':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id WHERE p_status = 5');
+				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 5');
 				break;
 			
 			case '2':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal WHERE p_status = 5 AND p_u_id = '.$_SESSION['userId']);
+				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id WHERE p_status = 5 AND p_u_id = '.$_SESSION['userId']);
 				break;
 
 			case '3':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id WHERE p_status = 5');
+				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 5');
 				break;
 
 			case '4':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id WHERE p_status = 5');
+				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 5');
 				break;
 
 			case '5':
+				
 				$idProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_u_id = ".$_SESSION['userId'])->row()->ua_p_id;
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN user_auth ON ua_u_id = p_u_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 5 AND ua_p_id = '.$idProdi);
+
+				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id LEFT JOIN user_auth ON ua_u_id = p_u_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 5 AND ua_p_id = '.$idProdi);
+				
 				break;
 		}
 		
@@ -56,9 +61,9 @@ class Laporan extends MX_controller
 
 	function insert($id)
 	{
-		echo "<pre>";
-		print_r($_POST);
-		print_r($_FILES);
+		//echo "<pre>";
+		//print_r($_POST);
+		//print_r($_FILES);
 		//exit;
 		$this->db->trans_begin();
 
@@ -71,6 +76,17 @@ class Laporan extends MX_controller
         $this->db->insert('laporan');
 
         $lastId = $this->db->insert_id();
+
+        $this->db->set('tl_l_id',$lastId);
+        $this->db->set('tl_status','0');
+        $this->db->set('tl_created',date('Y-m-d H:i:j'));
+        $this->db->insert('trx_laporan');
+
+        $lastTrxId = $this->db->insert_id();
+
+        $this->db->set('l_tl_id',$lastTrxId);
+        $this->db->where('l_id',$lastId);
+        $this->db->update('laporan');
 
         if ($_FILES['kuitansi']['name'] != '')
         {
@@ -309,51 +325,50 @@ class Laporan extends MX_controller
 
 	function proses($id)
 	{
-		$data['proposal'] = $this->db->query('SELECT * FROM proposal WHERE p_id = '.$id)->row();
-		$data['jenis'] = $this->db->query('SELECT * FROM jenis_kegiatan');
+		$data['proposal'] = $this->db->query('SELECT * FROM proposal INNER JOIN laporan ON p_id = l_p_id WHERE p_id = '.$id)->row();
+		
 		$data['catatan'] = $this->db->query('
 										SELECT * 
-										FROM trx_pengajuan 
-										INNER JOIN proposal ON p_id = tp_p_id 
-										INNER JOIN user ON u_id = tp_u_id 
+										FROM trx_laporan 
+										INNER JOIN laporan ON l_id = tl_l_id
+										INNER JOIN proposal ON p_id = l_p_id 
+										INNER JOIN user ON u_id = tl_u_id 
 										INNER JOIN user_auth ON ua_u_id = u_id
 										INNER JOIN role ON r_id = ua_r_id
-										WHERE tp_catatan IS NOT NULL AND tp_p_id = '.$id);
-		//echo $this->db->last_query();exit;
+										WHERE tl_catatan IS NOT NULL AND p_id = '.$id);
 
-		$this->load->view('proses_view',$data);
+		$this->load->view('laporan/proses_view',$data);
 	}
 
-	function prosesSet($proposalId)
+	function prosesSet($laporanId)
 	{
 		$this->db->trans_begin();
 
-		$this->db->set('tp_p_id',$proposalId);
-		$this->db->set('tp_u_id',$_SESSION['userId']);
-		$this->db->set('tp_status',$_POST['status']);
-		$this->db->set('tp_catatan',$_POST['catatan']);
-		$this->db->set('tp_created',date('Y-m-d H:i:j'));
-		$this->db->insert('trx_pengajuan');
+		$this->db->set('tl_l_id',$laporanId);
+		$this->db->set('tl_u_id',$_SESSION['userId']);
+		$this->db->set('tl_status',$_POST['status']);
+		$this->db->set('tl_catatan',$_POST['catatan']);
+		$this->db->set('tl_created',date('Y-m-d H:i:j'));
+		$this->db->insert('trx_laporan');
 
 		$trxId = $this->db->insert_id();
 
-		$this->db->set('p_status',$_POST['status']);
-		$this->db->set('p_biaya_realisasi',$_POST['biayaRealisasi']);
-		$this->db->set('p_tp_id',$trxId);
-		$this->db->where('p_id',$proposalId);
-		$this->db->update('proposal');
+		$this->db->set('l_status',$_POST['status']);
+		$this->db->set('l_tl_id',$trxId);
+		$this->db->where('l_id',$laporanId);
+		$this->db->update('laporan');
 
 		if ($this->db->trans_status() === FALSE)
 		{
 		    $this->db->trans_rollback();
 		    $this->session->set_flashdata('error', 'Terjadi Kesalahan Sistem');
-		    redirect('proposal/pengajuan/daftar');
+		    redirect('proposal/laporan/daftar');
 		}
 		else
 		{
 		    $this->db->trans_commit();
 		    $this->session->set_flashdata('success', 'Proses Proposal Berhasil Di Ubah');
-		    redirect('proposal/pengajuan/daftar');
+		    redirect('proposal/laporan/daftar');
 		}
 	}
 

@@ -5,14 +5,9 @@
 <?php
     
     $status = array( 
-        '0' => '<span class="label label-sm label-warning">Tunggu Proses Prodi</span>',
-        '1' => '<span class="label label-sm label-info">Disetujui Oleh Prodi</span>',
-        '2' => '<span class="label label-sm label-danger">Di Tolak Prodi</span>',
-        '3' => '<span class="label label-sm label-warning">Harap Di Perbaiki (Prodi)</span>',
-        '4' => '<span class="label label-sm label-warning">Tunggu Proses Fakultas</span>',
-        '5' => '<span class="label label-sm label-info">Disetujui Oleh Fakultas</span>',
-        '6' => '<span class="label label-sm label-danger">Di Tolak Fakultas</span>',
-        '7' => '<span class="label label-sm label-warning">Harap Di Perbaiki (Fakultas)</span>',
+        '0' => '<span class="label label-sm label-warning">Tunggu Proses Fakultas</span>',
+        '1' => '<span class="label label-sm label-danger">Perbaiki Fakultas</span>',
+        '2' => '<span class="label label-sm label-info">Disetujui Oleh Fakultas</span>'
          );
 
     $roleUser = array('1','3','4','5');
@@ -76,6 +71,7 @@
                                             <th>Nomor HP</th>
                                             <th>Tanggal Mulai</th>
                                             <th>Tanggal Selesai</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                         </thead>
@@ -83,6 +79,7 @@
                                             <?php if($daftar->num_rows() > 0){
                                                 foreach($daftar->result() as $row){
                                                     ?>
+                                            
                                             <tr>
                                                 <?php if(in_array($_SESSION['roleId'],$roleUser)){ ?>
                                                 <td><?php echo $row->u_nama ?></td>
@@ -93,11 +90,108 @@
                                                 <td><?php echo $row->p_tanggal_mulai ?></td>
                                                 <td><?php echo $row->p_tanggal_selesai ?></td>
                                                 <td>
-                                                    <a href="<?php echo site_url('proposal/laporan/create/'.$row->p_id) ?>"><span class="label label-violet">Buat LPJ</span></a>
+                                                    
+                                                    <?php 
+                                                        if(in_array($_SESSION['roleId'],$roleUser)){ 
+
+                                                            $cek = $this->db->query("SELECT * FROM laporan WHERE l_p_id = ".$row->p_id);
+
+                                                            if($cek->num_rows() > 0){
+
+                                                                if($cek->row()->l_status == 1){
+
+                                                                    $isRevisi = $this->db->query("SELECT * FROM trx_laporan WHERE tl_id = ".$cek->row()->l_tl_id)->row();
+
+                                                                    if($isRevisi->tl_updated != null){
+                                                    ?>
+                                                                    <a href="<?php echo site_url('proposal/laporan/proses/'.$row->l_id) ?>"><?php echo '<span class="label label-sm label-warning">Sudah Di Revisi</span>' ?></a>
+                                                    <?php
+                                                                    }else{
+                                                    ?>
+                                                                    <span class="label label-sm label-danger">Belum Di Revisi</span>
+                                                    <?php
+                                                                    }
+                                                    ?>
+
+                                                    <?php
+                                                                }elseif($cek->row()->l_status == 0){
+                                                    ?>
+                                                                <a href="<?php echo site_url('proposal/laporan/proses/'.$row->l_id) ?>"><?php echo $status[$cek->row()->l_status] ?></a>
+                                                    <?php
+                                                                }else{
+                                                    ?>
+                                                                <span class="label label-sm label-warning">Sudah Diterima</span>
+                                                    <?php
+                                                                }
+                                                    ?>
+                                                                
+                                                                
+                                                    <?php
+                                                            }else{
+                                                    ?>
+                                                                
+                                                                <span class="label label-sm label-danger">Belum Di Buat</span>
+                                                    <?php
+                                                            }
+
+                                                    ?>
+
+                                                    <?php 
+                                                        }else{ 
+                                                            $cek = $this->db->query("SELECT * FROM laporan WHERE l_p_id = ".$row->p_id);
+
+                                                            if($cek->num_rows() > 0){
+
+                                                                if($cek->row()->l_status == 1){
+
+                                                                    $isRevisi = $this->db->query("SELECT * FROM trx_laporan WHERE tl_id = ".$cek->row()->l_tl_id)->row();
+
+                                                                    if($isRevisi->tl_updated != null){
+                                                    ?>
+                                                                        <span class="label label-sm label-info">Sudah Di Revisi Tunggu Fakultas</span>
+                                                    <?php 
+                                                                    }else{
+                                                    ?>
+                                                                        <a href="<?php echo site_url('proposal/laporan/revisi/'.$row->l_id) ?>"><?php echo $status[$cek->row()->l_status] ?></a>
+                                                    <?php
+                                                                    }
+
+                                                    ?>
+
+                                                    <?php        
+                                                                }else{
+                                                    ?>
+                                                                    <?php echo $status[$cek->row()->l_status] ?>
+                                                    <?php
+                                                                }
+
+                                                    ?>
+                                                    <?php
+                                                            }
+                                                    ?>
+
+                                                    <?php } ?>
+
+                                                </td>
+                                                <td>
+                                                    <?php 
+                                                        $cek = $this->db->query("SELECT * FROM laporan WHERE l_p_id = ".$row->p_id); 
+                                                        if($cek->num_rows() > 0){
+                                                    ?>
+                                                        <a href="<?php echo site_url('proposal/laporan/edit/'.$row->p_id) ?>"><span class="label label-green">Ubah LPJ</span></a>
+                                                    <?php 
+                                                        }else{
+                                                    ?>
+                                                        <a href="<?php echo site_url('proposal/laporan/create/'.$row->p_id) ?>"><span class="label label-violet">Buat LPJ</span></a>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                    
                                                 </td>
 
                                             </tr>
-                                                    <?php
+                                            
+                                            <?php
                                                 }
                                             }
                                             ?>
