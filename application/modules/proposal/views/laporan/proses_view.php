@@ -37,7 +37,7 @@
                                                 <?php if($catatan->num_rows() > 0){ foreach($catatan->result() as $row){ ?>
                                                 <tr>
                                                     <td><?php echo $row->r_nama ?></td>
-                                                    <td><?php echo $row->tp_catatan ?></td>
+                                                    <td><?php echo $row->tl_catatan ?></td>
                                                 </tr>
                                                 <?php } } ?>
                                             </tbody>
@@ -192,19 +192,20 @@
                                                     <h3 class="text-green">Rp. <?php echo number_format($proposal->p_biaya_realisasi) ?></h3>
                                                 </div>
                                             </div>
-                                            <br/>
+
+                                            <div class="form-group">
+                                                <label for="inputAddress" class="col-md-3 control-label">Informasi Tambahan</label>
+                                                <div class="col-md-9">
+                                                    <p class="text-green"><?php echo $proposal->p_ringkasan ?></p>
+                                                </div>
+                                            </div>
+                                            
                                             <div class="form-group">
                                                 <label for="exampleInputFile" class="col-md-3 control-label">File RAB</label>
                                                 <div class="col-md-9">
                                                 <?php echo ($proposal->p_file_rab == null) ? 'Belum Upload' : '<a href="'.base_url().$proposal->p_file_rab_path.'" target="__blank"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-file-text"></i>&nbsp;LIHAT</button></a>' ?>
                                                 </div>
                                             </div>
-                                            <div class="form-group mbn"><label for="inputContent" class="col-md-3 control-label">Informasi Tambahan</label>
-                                                <div class="col-md-9">
-                                                    <p class="text-green"> <?php echo $proposal->p_ringkasan ?> </p>
-                                                </div>
-                                            </div>
-                                            <br/>
                                         </div>
                                     </div>
                                 </div>

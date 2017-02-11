@@ -325,7 +325,7 @@ class Laporan extends MX_controller
 
 	function proses($id)
 	{
-		$data['proposal'] = $this->db->query('SELECT * FROM proposal INNER JOIN laporan ON p_id = l_p_id WHERE p_id = '.$id)->row();
+		$data['proposal'] = $this->db->query('SELECT * FROM laporan INNER JOIN proposal ON p_id = l_p_id WHERE l_id = '.$id)->row();
 		
 		$data['catatan'] = $this->db->query('
 										SELECT * 
@@ -335,7 +335,7 @@ class Laporan extends MX_controller
 										INNER JOIN user ON u_id = tl_u_id 
 										INNER JOIN user_auth ON ua_u_id = u_id
 										INNER JOIN role ON r_id = ua_r_id
-										WHERE tl_catatan IS NOT NULL AND p_id = '.$id);
+										WHERE tl_catatan IS NOT NULL AND l_id = '.$id);
 
 		$this->load->view('laporan/proses_view',$data);
 	}
@@ -372,110 +372,178 @@ class Laporan extends MX_controller
 		}
 	}
 
-	function revisi( $id , $trxId )
+	function revisi( $laporanId )
 	{
-		$data['proposal'] = $this->db->query('SELECT * FROM proposal WHERE p_id = '.$id)->row();
+		$data['proposal'] = $this->db->query('SELECT * FROM laporan INNER JOIN proposal ON p_id = l_p_id WHERE l_id = '.$laporanId)->row();
 		$data['jenis'] = $this->db->query('SELECT * FROM jenis_kegiatan');
 		$data['catatan'] = $this->db->query('
 										SELECT * 
-										FROM trx_pengajuan 
-										INNER JOIN proposal ON p_id = tp_p_id 
-										INNER JOIN user ON u_id = tp_u_id 
+										FROM trx_laporan
+										INNER JOIN laporan ON tl_l_id = l_id 
+										INNER JOIN user ON u_id = tl_u_id 
 										INNER JOIN user_auth ON ua_u_id = u_id
 										INNER JOIN role ON r_id = ua_r_id
-										WHERE tp_catatan IS NOT NULL AND tp_p_id = '.$id);
+										WHERE tl_catatan IS NOT NULL AND tl_l_id = '.$laporanId);
 
-		$this->load->view('revisi_view',$data);
+		$this->load->view('laporan/revisi_view',$data);
 	}
 
-	function updateRevisi( $id , $trxId )
+	function updateRevisi( $laporanId )
 	{
+
+		$dataLaporan = $this->db->query("SELECT * FROM laporan WHERE l_id = ".$laporanId)->row();
 		
 		$this->db->trans_begin();
 
-		$this->db->set('p_u_id',$_SESSION['userId']);
-        $this->db->set('p_jk_id',$_POST['jenisKegiatan']);
-        $this->db->set('p_kegiatan',$_POST['nama']);
-        $this->db->set('p_lingkup',$_POST['lingkupKegiatan']);
-        $this->db->set('p_tujuan',$_POST['tujuan']);
-        $this->db->set('p_tempat',$_POST['tempat']);
-        $this->db->set('p_penanggung_jawab',$_POST['penanggungJawab']);
-        $this->db->set('p_ringkasan',$_POST['ringkasan']);
-        $this->db->set('p_handphone',$_POST['hp']);
-        $this->db->set('p_tanggal_mulai',$_POST['tanggalMulai']);
-        $this->db->set('p_tanggal_selesai',$_POST['tanggalSelesai']);
-        $this->db->set('p_biaya',$_POST['biaya']);
-        $this->db->set('p_latar_belakang',$_POST['latarBelakang']);
-        $this->db->set('p_luaran',$_POST['luaran']);
-        $this->db->set('p_penanggung_jawab1',$_POST['penanggungJawab1']);
-        $this->db->set('p_handphone1',$_POST['hp1']);
-        $this->db->set('p_is_pihak_luar',$_POST['statusPihakLuar']);
-        $this->db->set('p_pihak_luar_nama',$_POST['namaPihakLuar']);
-        $this->db->set('p_pihak_luar_telephone',$_POST['nomorPihakLuar']);
-        $this->db->set('p_pihak_luar_instansi',$_POST['organisasiPihakLuar']);
-        $this->db->set('p_updated',date('Y-m-d H:i:j'));
-        $this->db->where('p_id',$id);
-        $this->db->update('proposal');
+        $this->db->set('l_luaran',$_POST['luaran']);
+        $this->db->set('l_evaluasi',$_POST['evaluasi']);
+        $this->db->set('l_realisasi_dana',$_POST['biaya']);
+        $this->db->set('l_dokumentasi_link',$_POST['linkBerita']);
+        $this->db->set('l_updated',date('Y-m-d H:i:j'));
+        $this->db->where('l_id',$laporanId);
+        $this->db->update('laporan');
 
-        $this->db->set('tp_updated',date('Y-m-d H:i:j'));
-        $this->db->where('tp_id',$trxId);
-        $this->db->update('trx_pengajuan');
+        $this->db->set('tl_l_id',$laporanId);
+        $this->db->set('tl_updated',date('Y-m-d H:i:j'));
+        $this->db->where('tl_id',$dataLaporan->l_tl_id);
+        $this->db->update('trx_laporan');
 
-        $setFileName = str_replace(' ', '_', $_POST['nama']);
-
-        $filename = $id.'_'.$setFileName.'.pdf';
-
-		$config['upload_path']          = './assets/rab';
-        $config['allowed_types']        = 'pdf|PDF';
-        $config['overwrite']           	= TRUE;
-        $config['max_size']            	= 3072;
-        $config['file_name'] 			= $filename;
-
-        $this->load->library('upload', $config);
-
-        /**if ( ! $this->upload->do_upload('files'))
+        if ($_FILES['kuitansi']['name'] != '')
         {
-            $error = array('error' => $this->upload->display_errors());
-            $this->session->set_flashdata('errorf', $error);
+
+	        $filename = $id.'_.pdf';
+
+			$config['upload_path']          = './assets/dokumentasi/kuitansi';
+	        $config['allowed_types']        = 'pdf|PDF|png|jpg|jpeg|JPG|PNG|JPEG';
+	        $config['overwrite']           	= TRUE;
+	        $config['max_size']            	= 3072;
+	        $config['file_name'] 			= $filename;
+
+	        $this->load->library('upload', $config);
+
+	        $this->upload->initialize($config);
+	        if ( ! $this->upload->do_upload('kuitansi'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            $this->session->set_flashdata('errorf', $error);
+	        }
+	        else
+	        {
+
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('l_file_kuitansi_path','assets/dokumentasi/kuitansi/'.$filename);
+	            $this->db->set('l_file_kuitansi',$filename);
+	            $this->db->where('l_id',$lastId);
+	            $this->db->update('laporan');
+	        }
         }
-        else
+
+        if ($_FILES['foto1']['name'] != '')
         {
+        	//echo "<pre>";print_r($_FILES['foto1']);exit;
+	        $filename1 = $id.'_1.png';
 
-            $data = array('upload_data' => $this->upload->data());
+			$config1['upload_path']         = './assets/dokumentasi/photo';
+	        $config1['allowed_types']       = 'png|jpg|jpeg|JPG|PNG|JPEG';
+	        $config1['overwrite']           = TRUE;
+	        $config1['max_size']           	= 1024;
+	        $config1['file_name'] 			= $filename1;
 
-            $this->db->set('p_file_path','assets/proposal/'.$filename);
-            $this->db->set('p_file',$filename);
-            $this->db->where('p_id',$id);
-            $this->db->update('proposal');
-        }**/
+	        $this->load->library('upload', $config1);
 
-        if ( ! $this->upload->do_upload('filesRab'))
-        {
-            $error = array('error' => $this->upload->display_errors());
-            $this->session->set_flashdata('errorf', $error);
+	        $this->upload->initialize($config1);
+	        if ( ! $this->upload->do_upload('foto1'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            //print_r($error);exit;
+	            $this->session->set_flashdata('errorp1', $error);
+	        }
+	        else
+	        {
+
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('l_file_photo1_path','assets/dokumentasi/photo/'.$filename1);
+	            $this->db->set('l_file_photo1',$filename1);
+	            $this->db->where('l_id',$lastId);
+	            $this->db->update('laporan');
+	        }
         }
-        else
+
+        if ($_FILES['foto2']['name'] != '')
         {
 
-            $data = array('upload_data' => $this->upload->data());
+	        $filename2 = $id.'_2.png';
 
-            $this->db->set('p_file_rab_path','assets/rab/'.$filename);
-            $this->db->set('p_file_rab',$filename);
-            $this->db->where('p_id',$id);
-            $this->db->update('proposal');
+			$config2['upload_path']         = './assets/dokumentasi/photo';
+	        $config2['allowed_types']       = 'png|jpg|jpeg|JPG|PNG|JPEG';
+	        $config2['overwrite']           = TRUE;
+	        $config2['max_size']          	= 1024;
+	        $config2['file_name'] 			= $filename2;
+
+	        $this->load->library('upload', $config2);
+
+	        $this->upload->initialize($config2);
+	        if ( ! $this->upload->do_upload('foto2'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            $this->session->set_flashdata('errorp2', $error);
+	        }
+	        else
+	        {
+
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('l_file_photo2_path','assets/dokumentasi/photo/'.$filename2);
+	            $this->db->set('l_file_photo2',$filename2);
+	            $this->db->where('l_id',$lastId);
+	            $this->db->update('laporan');
+	        }
+        }
+
+        if ($_FILES['foto3']['name'] != '')
+        {
+
+	        $filename3 = $id.'_3.png';
+
+			$config3['upload_path']         = './assets/dokumentasi/photo';
+	        $config3['allowed_types']       = 'png|jpg|jpeg|JPG|PNG|JPEG';
+	        $config3['overwrite']         	= TRUE;
+	        $config3['max_size']          	= 1024;
+	        $config3['file_name'] 			= $filename3;
+
+	        $this->load->library('upload', $config3);
+
+	        $this->upload->initialize($config3);
+	        if ( ! $this->upload->do_upload('foto3'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            $this->session->set_flashdata('errorp3', $error);
+	        }
+	        else
+	        {
+
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('l_file_photo3_path','assets/dokumentasi/photo/'.$filename3);
+	            $this->db->set('l_file_photo3',$filename3);
+	            $this->db->where('l_id',$lastId);
+	            $this->db->update('laporan');
+	        }
         }
 
         if ($this->db->trans_status() === FALSE)
 		{
 		    $this->db->trans_rollback();
 		    $this->session->set_flashdata('error', 'Terjadi Kesalahan Sistem');
-		    redirect('proposal/pengajuan/daftar');
+		    redirect('proposal/laporan/daftar');
 		}
 		else
 		{
 		    $this->db->trans_commit();
-		    $this->session->set_flashdata('success', 'Proposal Berhasil di Ajukan');
-		    redirect('proposal/pengajuan/daftar');
+		    $this->session->set_flashdata('success', 'Laporan Berhasil di Revisi');
+		    redirect('proposal/laporan/daftar');
 		}
 
 	}

@@ -5,9 +5,9 @@
 <?php
     
     $status = array( 
-        '0' => '<span class="label label-sm label-warning">Tunggu Proses Fakultas</span>',
-        '1' => '<span class="label label-sm label-danger">Perbaiki Fakultas</span>',
-        '2' => '<span class="label label-sm label-info">Disetujui Oleh Fakultas</span>'
+        '0' => '<span class="label label-sm label-warning">Tunggu Proses (Fakultas)</span>',
+        '1' => '<span class="label label-sm label-danger">Perbaiki (Fakultas)</span>',
+        '2' => '<span class="label label-sm label-info">Disetujui (Fakultas)</span>'
          );
 
     $roleUser = array('1','3','4','5');
@@ -178,7 +178,7 @@
                                                         $cek = $this->db->query("SELECT * FROM laporan WHERE l_p_id = ".$row->p_id); 
                                                         if($cek->num_rows() > 0){
                                                     ?>
-                                                        <a href="<?php echo site_url('proposal/laporan/edit/'.$row->p_id) ?>"><span class="label label-green">Ubah LPJ</span></a>
+                                                        <!--a href="<?php echo site_url('proposal/laporan/edit/'.$row->p_id) ?>"><span class="label label-green">Ubah LPJ</span></a-->
                                                     <?php 
                                                         }else{
                                                     ?>
