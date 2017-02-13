@@ -220,6 +220,134 @@ class User extends MX_controller
 		    redirect('user/userList');
 		}
 	}
+
+	function profiles()
+	{
+		$data['personal'] = $this->db->query("SELECT * FROM user INNER JOIN user_auth ON u_id = ua_u_id WHERE u_id = ".$_SESSION['userId'])->row();
+		$this->load->view('profiles_view',$data);	
+	}
+
+	function updateProfile($userId)
+	{
+		$this->db->trans_begin();
+
+		$this->db->set('u_nama',$_POST['nama']);
+		$this->db->set('u_singkatan',$_POST['singkatan']);
+		$this->db->set('u_ketua',$_POST['ketua']);
+		$this->db->set('u_email',$_POST['email']);
+		$this->db->set('u_handphone',$_POST['handphone']);
+		$this->db->set('u_deskripsi',$_POST['deskripsi']);
+		$this->db->where('u_id',$userId);
+		$this->db->update('user');
+
+		if ($this->db->trans_status() === FALSE)
+		{
+		    $this->db->trans_rollback();
+		    $this->session->set_flashdata('error', 'Terjadi Kesalahan Sistem');
+		    redirect('user/profiles');
+		}
+		else
+		{
+		    $this->db->trans_commit();
+		    $this->session->set_flashdata('success', 'Profile Berhasil di Update');
+		    redirect('user/profiles');
+		}
+	}
+
+	function updateUsername($userAuthId)
+	{
+		$this->db->trans_begin();
+
+		$this->db->set('ua_username',$_POST['username']);
+		$this->db->where('ua_id',$userAuthId);
+		$this->db->update('user_auth');
+
+		if ($this->db->trans_status() === FALSE)
+		{
+		    $this->db->trans_rollback();
+		    $this->session->set_flashdata('error', 'Terjadi Kesalahan Sistem');
+		    redirect('user/profiles');
+		}
+		else
+		{
+		    $this->db->trans_commit();
+		    $this->session->set_flashdata('success', 'Username Berhasil di Ganti');
+		    redirect('user/profiles');
+		}
+	}
+
+	function updatePassword($userAuthId)
+	{
+		
+		if ($_POST['passw'] != $_POST['rePassw'])
+		{
+			$this->session->set_flashdata('error', 'Password baru dengan konfirmasi password tidak sama');
+		    redirect('user/profiles');
+		}
+		else
+		{
+
+			$this->db->trans_begin();
+
+			$this->db->set('ua_password',md5($_POST['passw']));
+			$this->db->set('ua_plaintext',$_POST['passw']);
+			$this->db->where('ua_id',$userAuthId);
+			$this->db->update('user_auth');
+
+			if ($this->db->trans_status() === FALSE)
+			{
+			    $this->db->trans_rollback();
+			    $this->session->set_flashdata('error', 'Terjadi Kesalahan Sistem');
+			    redirect('user/profiles');
+			}
+			else
+			{
+			    $this->db->trans_commit();
+			    $this->session->set_flashdata('success', 'Password Berhasil di Ganti');
+			    redirect('user/profiles');
+			}
+
+		}
+
+	}
+
+	function updatePicture($userId)
+	{
+		
+		$data = $this->db->query("SELECT * FROM user WHERE u_id = ".$userId)->row();
+
+		$filename = $userId.'_'.$data->u_singkatan.'.jpg';
+
+		$config['upload_path']          = './assets/images/logo';
+        $config['allowed_types']        = 'jpg|png';
+        $config['overwrite']           	= TRUE;
+        $config['max_size']            	= 1024;
+        $config['file_name'] 			= $filename;
+
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('pict'))
+        {
+            $error = array('error' => $this->upload->display_errors());
+            $this->session->set_flashdata('errorf', $error );
+			redirect('user/profiles');
+        }
+        else
+        {
+
+            $data = array('upload_data' => $this->upload->data());
+
+            $this->db->set('u_logo_path','assets/images/logo/'.$filename);
+            $this->db->set('u_logo',$filename);
+            $this->db->where('u_id',$userId);
+            $this->db->update('user');
+
+            $this->session->set_flashdata('success', 'Gambar Berhasil di Ganti');
+			redirect('user/profiles');
+        }
+
+
+	}
 	
 }
 

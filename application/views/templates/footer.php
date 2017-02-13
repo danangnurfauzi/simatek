@@ -26,6 +26,7 @@
 <script src="<?php echo base_url() ?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <script src="<?php echo base_url() ?>assets/vendors/DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url() ?>assets/vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="<?php echo base_url() ?>assets/vendors/uploadify/jquery.uploadify.min.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
 <!--script src="<?php echo base_url() ?>assets/vendors/intro.js/intro.js"></script-->
 <?php if($this->uri->segment(2) == 'dashboard'){ ?>

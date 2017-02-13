@@ -301,8 +301,6 @@
 
     $('#catatan').wysihtml5();
 
-
-
 </script>
 
 </body>
