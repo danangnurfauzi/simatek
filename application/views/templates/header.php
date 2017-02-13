@@ -25,7 +25,6 @@
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/iCheck/skins/all.css">
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/jquery-news-ticker/jquery.news-ticker.css">
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-    <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/uploadify/uploadify.css">
     <!--Loading style-->
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/css/themes/style1/pink-violet.css" id="theme-change" class="style-change color-change">
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/css/style-responsive.css">
