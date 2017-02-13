@@ -27,7 +27,7 @@
                     </i><span class="menu-title">Manajemen User</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="<?php echo site_url('user/userList') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Daftar User</span></a></li>
-                            <li><a href="<?php echo site_url('produk/barang') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Reset Password</span></a></li>
+                            <!--li><a href="<?php echo site_url('produk/barang') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Reset Password</span></a></li-->
                         </ul>
                     </li>
                     <li><a href="#"><i class="fa fa-money">
@@ -58,7 +58,7 @@
                             </a></li-->
                         </ul>
                     </li>
-                    <li><a href="#"><i class="fa fa-print">
+                    <!--li><a href="#"><i class="fa fa-print">
                         <div class="icon-bg bg-red"></div>
                     </i><span class="menu-title">Manajemen Laporan</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -66,7 +66,7 @@
                             <li><a href="<?php echo site_url('invoice/paid') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Paid</span></a></li>
                             </a></li>
                         </ul>
-                    </li>
+                    </li-->
 
                      <?php       
                             break;

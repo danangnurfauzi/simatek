@@ -93,6 +93,9 @@ class User extends MX_controller
 		else
 		{
 		    $this->db->trans_commit();
+		    
+		    $this->sendEmailCreateUser($id);
+
 		    $this->session->set_flashdata('success', 'Data Berhasil Di Tambah');
 		    redirect('user/userList');
 		}
@@ -202,10 +205,10 @@ class User extends MX_controller
 	{
 		$this->db->trans_begin();
 
-		$this->db->set('u_password',md5('12345'));
-		$this->db->set('u_plaintext','12345');
-		$this->db->where('u_id',$id);
-		$this->db->update('user');
+		$this->db->set('ua_password',md5('12345'));
+		$this->db->set('ua_plaintext','12345');
+		$this->db->where('ua_u_id',$id);
+		$this->db->update('user_auth');
 
 		if ($this->db->trans_status() === FALSE)
 		{
@@ -346,6 +349,54 @@ class User extends MX_controller
 			redirect('user/profiles');
         }
 
+	}
+
+	function sendEmailCreateUser( $userId )
+	{
+		
+		$data = $this->db->query("SELECT * FROM user INNER JOIN user_auth ON ua_u_id = u_id WHERE u_id = ".$userId)->row();
+
+		$subject = "ANDA TELAH DIBUATKAN AKUN PADA APLIKASI SIMATEK";
+		$emailTo = $data->u_email;
+
+		$message = "";
+
+		$message .= "Username : ".$data->ua_username."<br />";
+		$message .= "Password : ".$data->ua_plaintext."<br />";
+		$message .= "<a href='".base_url()."' target='__blank'>SIMATEK</a>";
+
+		$config = Array(
+                    'protocol'  => 'smtp',
+                    'smtp_host' => 'ssl://smtp.googlemail.com',
+                    'smtp_port' => '465',
+                    'smtp_user' => 'fauzinurdanang@gmail.com', 
+                    'smtp_pass' => 't3l0g0d0g', 
+                    'mailtype'  => 'html',
+                    'charset'   => 'iso-8859-1',
+                    'wordwrap'  => TRUE,
+                    'priority' => '1'
+                  );
+
+        //print_r($set);exit;
+        
+        $this->load->library('email', $config);
+        
+        $this->email->set_newline("\r\n");  
+        $this->email->from('no-reply@simatek.umy.ac.id'); 
+        $this->email->to($emailTo);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if($this->email->send())
+        {
+            $status = "success";
+        }
+        else
+        {
+            $status = $this->email->print_debugger();
+            print_r($status);
+            //show_error($this->email->print_debugger());
+        }
 
 	}
 	
