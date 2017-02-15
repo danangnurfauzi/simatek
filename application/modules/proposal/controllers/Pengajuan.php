@@ -430,6 +430,220 @@ class Pengajuan extends MX_controller
 		}
 
 	}
+
+	function cetakBuktiApproval( $proposalId )
+	{
+		$this->load->library('m_pdf');
+
+		$data['data'] = $this->db->query("SELECT * FROM proposal INNER JOIN user ON u_id = p_u_id WHERE p_id = ".$proposalId)->row();
+
+		$html = $this->load->view('cetakBuktiApproval_view', $data , true);
+
+		$this->m_pdf->pdf->WriteHTML($html);
+
+		$this->m_pdf->pdf->Output($pdfFilePath, "D"); 
+	}
+
+	function complete( $proposalId )
+	{
+		
+		$data['proposal'] = $this->db->query("SELECT * FROM proposal WHERE p_id = ".$proposalId)->row();
+
+		$data['complete'] = $this->db->query("SELECT * FROM proposal_complete WHERE pc_p_id = ".$proposalId);
+
+		$this->load->view('complete_view',$data);
+
+	}
+
+	function insertComplete( $proposalId )
+	{
+
+		$this->db->trans_begin();
+		
+		$cek = $this->db->query("SELECT * FROM proposal_complete WHERE pc_p_id = ".$proposalId);
+
+		if ($cek->num_rows() > 0) 
+		{
+			$this->db->set('pc_updated',date('Y-m-d H:i:j'));
+			$this->db->where('pc_p_id',$proposalId);
+			$this->db->update('proposal_complete');
+		}
+		else
+		{
+			$this->db->set('pc_p_id',$proposalId);
+			$this->db->set('pc_created',date('Y-m-d H:i:j'));
+			$this->db->insert('proposal_complete');
+		}
+		
+		if ($_FILES['panitia']['name'] != '')
+        {
+
+	        $filename = $proposalId.'_pernyataan_panitia.pdf';
+
+			$config['upload_path']          = './assets/proposal/complete';
+	        $config['allowed_types']        = 'pdf|PDF';
+	        $config['overwrite']           	= TRUE;
+	        $config['max_size']            	= 1024;
+	        $config['file_name'] 			= $filename;
+
+	        $this->load->library('upload', $config);
+
+	        $this->upload->initialize($config);
+	        if ( ! $this->upload->do_upload('panitia'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            $this->session->set_flashdata('errorf', $error);
+	        }
+	        else
+	        {
+
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('pc_surat_pernyataan_panitia_path','assets/proposal/complete/'.$filename);
+	            $this->db->set('pc_surat_pernyataan_panitia',$filename);
+	            $this->db->where('pc_p_id',$proposalId);
+	            $this->db->update('proposal_complete');
+	        }
+        }
+
+        if ($_FILES['pemerintah']['name'] != '')
+        {
+
+	        $filename = $id.'_izin_pemerintah.pdf';
+
+			$config['upload_path']          = './assets/proposal/complete';
+	        $config['allowed_types']        = 'pdf|PDF';
+	        $config['overwrite']           	= TRUE;
+	        $config['max_size']            	= 1024;
+	        $config['file_name'] 			= $filename;
+
+	        $this->load->library('upload', $config);
+
+	        $this->upload->initialize($config);
+	        if ( ! $this->upload->do_upload('pemerintah'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            $this->session->set_flashdata('errorf', $error);
+	        }
+	        else
+	        {
+
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('pc_surat_izin_pemerintah_path','assets/proposal/complete/'.$filename);
+	            $this->db->set('pc_surat_izin_pemerintah',$filename);
+	            $this->db->where('pc_p_id',$proposalId);
+	            $this->db->update('proposal_complete');
+	        }
+        }
+
+        if ($_FILES['polisi']['name'] != '')
+        {
+
+	        $filename = $id.'_izin_polisi.pdf';
+
+			$config['upload_path']          = './assets/proposal/complete';
+	        $config['allowed_types']        = 'pdf|PDF';
+	        $config['overwrite']           	= TRUE;
+	        $config['max_size']            	= 1024;
+	        $config['file_name'] 			= $filename;
+
+	        $this->load->library('upload', $config);
+
+	        $this->upload->initialize($config);
+	        if ( ! $this->upload->do_upload('polisi'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            $this->session->set_flashdata('errorf', $error);
+	        }
+	        else
+	        {
+
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('pc_surat_izin_polisi_path','assets/proposal/complete/'.$filename);
+	            $this->db->set('pc_surat_izin_polisi',$filename);
+	            $this->db->where('pc_p_id',$proposalId);
+	            $this->db->update('proposal_complete');
+	        }
+        }
+
+        if ($_FILES['ortu']['name'] != '')
+        {
+
+	        $filename = $id.'_izin_ortu.pdf';
+
+			$config['upload_path']          = './assets/proposal/complete';
+	        $config['allowed_types']        = 'pdf|PDF';
+	        $config['overwrite']           	= TRUE;
+	        $config['max_size']            	= 10240;
+	        $config['file_name'] 			= $filename;
+
+	        $this->load->library('upload', $config);
+
+	        $this->upload->initialize($config);
+	        if ( ! $this->upload->do_upload('ortu'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            $this->session->set_flashdata('errorf', $error);
+	        }
+	        else
+	        {
+
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('pc_surat_izin_ortu_path','assets/proposal/complete/'.$filename);
+	            $this->db->set('pc_surat_izin_ortu',$filename);
+	            $this->db->where('pc_p_id',$proposalId);
+	            $this->db->update('proposal_complete');
+	        }
+        }
+
+        if ($_FILES['dokter']['name'] != '')
+        {
+
+	        $filename = $id.'_izin_dokter.pdf';
+
+			$config['upload_path']          = './assets/proposal/complete';
+	        $config['allowed_types']        = 'pdf|PDF';
+	        $config['overwrite']           	= TRUE;
+	        $config['max_size']            	= 10240;
+	        $config['file_name'] 			= $filename;
+
+	        $this->load->library('upload', $config);
+
+	        $this->upload->initialize($config);
+	        if ( ! $this->upload->do_upload('dokter'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            $this->session->set_flashdata('errorf', $error);
+	        }
+	        else
+	        {
+
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('pc_surat_izin_dokter_path','assets/proposal/complete/'.$filename);
+	            $this->db->set('pc_surat_izin_dokter',$filename);
+	            $this->db->where('pc_p_id',$proposalId);
+	            $this->db->update('proposal_complete');
+	        }
+        }
+
+        if ($this->db->trans_status() === FALSE)
+		{
+		    $this->db->trans_rollback();
+		    $this->session->set_flashdata('error', 'Terjadi Kesalahan Sistem');
+		    redirect('proposal/pengajuan/daftar');
+		}
+		else
+		{
+		    $this->db->trans_commit();
+		    $this->session->set_flashdata('success', 'Proposal Berhasil di Lengkapi');
+		    redirect('proposal/pengajuan/daftar');
+		}
+
+	}
 	
 }
 

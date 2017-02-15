@@ -194,6 +194,10 @@
                                                 <td>
                                                     <a href="<?php echo site_url('proposal/pengajuan/edit/'.$row->p_id) ?>"><span class="label label-violet">Ubah</span></a>
                                                     <a href="<?php echo site_url('proposal/pengajuan/delete/'.$row->p_id) ?>" onclick="return confirm('Yakin Akan Di Hapus')"><span class="label label-red">Hapus</span></a>
+                                                    <?php if($row->p_status == 5){ ?>
+                                                    <a target="__blank" href="<?php echo site_url('proposal/pengajuan/cetakBuktiApproval/'.$row->p_id) ?>"><span class="label label-green">Cetak Bukti Persetujuan</span></a>
+                                                     <a href="<?php echo site_url('proposal/pengajuan/complete/'.$row->p_id) ?>"><span class="label label-orange">Lengkapi Syarat</span></a>
+                                                    <?php } ?>
                                                 </td>
 
                                             </tr>

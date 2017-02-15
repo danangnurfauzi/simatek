@@ -394,7 +394,7 @@ class User extends MX_controller
         else
         {
             $status = $this->email->print_debugger();
-            print_r($status);
+            //print_r($status);
             //show_error($this->email->print_debugger());
         }
 

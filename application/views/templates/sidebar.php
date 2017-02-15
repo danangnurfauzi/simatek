@@ -37,6 +37,7 @@
                             <li><a href="<?php echo site_url('anggaran/rancangan/jenis') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Jenis Anggaran</span></a></li>
                             <li><a href="<?php echo site_url('anggaran/rancangan/set') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Set Anggaran</span></a></li>
                             <li><a href="<?php echo site_url('anggaran/rancangan/relasi') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Relasi Anggaran</span></a></li>
+                            <li><a href="<?php echo site_url('anggaran/realisasi/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Realisasi Anggaran</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#"><i class="fa fa-pencil-square-o">
@@ -44,9 +45,9 @@
                     </i><span class="menu-title">Manajemen Proposal</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="<?php echo site_url('proposal/pengajuan/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Daftar Proposal</span></a></li>
-                            <li><a href="<?php echo site_url('proposal/pengajuan/waiting') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Proposal Masuk</span></a></li>
+                            <!--li><a href="<?php echo site_url('proposal/pengajuan/waiting') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Proposal Masuk</span></a></li>
                             <li><a href="<?php echo site_url('proposal/pengajuan/accepted') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Proposal Diterima</span></a></li>
-                            <li><a href="<?php echo site_url('proposal/pengajuan/blocked') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Proposal Ditolak</span></a></li>
+                            <li><a href="<?php echo site_url('proposal/pengajuan/blocked') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Proposal Ditolak</span></a></li-->
                         </ul>
                     </li>
                     <li><a href="#"><i class="fa fa-file-text-o">
