@@ -110,37 +110,7 @@
 <?php $this->load->view('templates/footer') ?>
 
 <script type="text/javascript">
-    $("#mulai").datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true
-    });
-
-    $("#selesai").datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true
-    });
-
-    $('#evaluasi').wysihtml5();
-    $('#luaran').wysihtml5();
-
-    $('#statusPihakLuar').change(function(){
-        var idStatus = $(this).val();
-        //alert(idStatus);
-        if ( idStatus == 1) 
-        {
-            $("#formPihakLuar").hide();
-            $("#namaPihakLuar").prop("required",false);
-            $("#nomorPihakLuar").prop("required",false);
-            $("#organisasiPihakLuar").prop("required",false);
-        }
-        else
-        {
-            $("#formPihakLuar").show();
-            $("#namaPihakLuar").prop("required",true);
-            $("#nomorPihakLuar").prop("required",true);
-            $("#organisasiPihakLuar").prop("required",true);
-        }
-    })
+    
 </script>
 
 </body>

@@ -131,22 +131,6 @@ class Pengajuan extends MX_controller
 
         $this->load->library('upload', $config);
 
-        /**if ( ! $this->upload->do_upload('files'))
-        {
-            $error = array('error' => $this->upload->display_errors());
-            $this->session->set_flashdata('errorf', $error);
-        }
-        else
-        {
-
-            $data = array('upload_data' => $this->upload->data());
-
-            $this->db->set('p_file_path','assets/proposal/'.$filename);
-            $this->db->set('p_file',$filename);
-            $this->db->where('p_id',$id);
-            $this->db->update('proposal');
-        }**/
-
         if ( ! $this->upload->do_upload('filesRab'))
         {
             $error = array('error' => $this->upload->display_errors());
@@ -172,6 +156,20 @@ class Pengajuan extends MX_controller
 		else
 		{
 		    $this->db->trans_commit();
+
+		    if ($isLkmProdi == '0')
+	        {
+	        	$dataKirim = $this->db->query("SELECT * FROM role INNER JOIN user_auth ON ua_r_id = r_id INNER JOIN user ON u_id = ua_u_id WHERE r_id = 4")->row()->u_email;
+	        }
+	        else
+	        {
+	        	$cariProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_is_prodi = 1 AND ua_u_id = ".$_SESSION['userId'])->row();
+
+	        	$dataKirim = $this->db->query("SELECT * FROM user WHERE u_id = ".$cariProdi->u_id)->row()->u_email;
+	        }
+
+		    $this->sendEmailPengajuanProposal( $idPengajuan , $dataKirim );
+
 		    $this->session->set_flashdata('success', 'Proposal Berhasil di Ajukan');
 		    redirect('proposal/pengajuan/daftar');
 		}
@@ -642,6 +640,58 @@ class Pengajuan extends MX_controller
 		    $this->session->set_flashdata('success', 'Proposal Berhasil di Lengkapi');
 		    redirect('proposal/pengajuan/daftar');
 		}
+
+	}
+
+	function sendEmailPengajuanProposal( $proposalId , $userIdReceived )
+	{
+		
+		$data = $this->db->query("SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id WHERE p_id = ".$proposalId)->row();
+
+		$dataTarget = $this->db->query("SELECT * FROM user WHERE u_id = ".$userIdReceived)->row();
+
+		$subject = "PENGAJUAN PROPOSAL";
+		$emailTo = $dataTarget->u_email;
+
+		$message = "";
+
+		$message .= "PROPOSAL KEGIATAN DARI : <br />";
+		$message .= "Organisasi : ".$data->u_nama."<br />";
+		$message .= "Judul Kegiatan : ".$data->p_kegiatan."<br />";
+		$message .= "<a href='".base_url()."' target='__blank'>Lebih Detail Login SIMATEK</a>";
+
+		$config = Array(
+                    'protocol'  => 'smtp',
+                    'smtp_host' => 'ssl://smtp.googlemail.com',
+                    'smtp_port' => '465',
+                    'smtp_user' => 'fauzinurdanang@gmail.com', 
+                    'smtp_pass' => 't3l0g0d0g', 
+                    'mailtype'  => 'html',
+                    'charset'   => 'iso-8859-1',
+                    'wordwrap'  => TRUE,
+                    'priority' => '1'
+                  );
+
+        //print_r($set);exit;
+        
+        $this->load->library('email', $config);
+        
+        $this->email->set_newline("\r\n");  
+        $this->email->from('no-reply@simatek.umy.ac.id'); 
+        $this->email->to($emailTo);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if($this->email->send())
+        {
+            $status = "success";
+        }
+        else
+        {
+            $status = $this->email->print_debugger();
+            //print_r($status);
+            //show_error($this->email->print_debugger());
+        }
 
 	}
 	

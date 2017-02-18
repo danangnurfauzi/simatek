@@ -209,7 +209,7 @@
                     <?php $foto = $this->db->query('SELECT * FROM user WHERE u_id = '.$_SESSION['userId'])->row()->u_logo_path; ?>
                     <li class="dropdown topbar-user"><a data-hover="dropdown" href="#" class="dropdown-toggle"><?php echo ( $foto != null) ? '<img src="'.base_url().$foto.'" alt="" class="img-responsive img-circle"/>' : '<img src="https://s3.amazonaws.com/uifaces/faces/twitter/kolage/48.jpg" alt="" class="img-responsive img-circle"/>' ?>&nbsp;<span class="hidden-xs"><?php echo $_SESSION['username'] ?></span>&nbsp;<span class="caret"></span></a>
                         <ul class="dropdown-menu dropdown-user pull-right">
-                            <li><a href="extra-profile.html"><i class="fa fa-user"></i>My Profile</a></li>
+                            <li><a href="<?php echo site_url('user/profiles') ?>"><i class="fa fa-user"></i>My Profile</a></li>
                             <!--li><a href="page-calendar.html"><i class="fa fa-calendar"></i>My Calendar</a></li>
                             <li><a href="email-inbox.html"><i class="fa fa-envelope"></i>My Inbox<span class="badge badge-danger">3</span></a></li>
                             <li><a href="#"><i class="fa fa-tasks"></i>My Tasks<span class="badge badge-success">7</span></a></li-->
