@@ -163,9 +163,13 @@ class Pengajuan extends MX_controller
 	        }
 	        else
 	        {
-	        	$cariProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_is_prodi = 1 AND ua_u_id = ".$_SESSION['userId'])->row();
+	        	$cariProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_u_id = ".$_SESSION['userId'])->row();
 
-	        	$dataKirim = $this->db->query("SELECT * FROM user WHERE u_id = ".$cariProdi->u_id)->row()->u_email;
+	        	$isProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_is_prodi = 1 AND ua_p_id = ".$cariProdi->ua_p_id)->row();
+
+	        	//echo $this->db->last_query();
+
+	        	$dataKirim = $this->db->query("SELECT * FROM user WHERE u_id = ".$isProdi->ua_u_id)->row()->u_email;
 	        }
 
 		    $this->sendEmailPengajuanProposal( $idPengajuan , $dataKirim );
@@ -253,7 +257,7 @@ class Pengajuan extends MX_controller
 
 		$baseUrl = $_SERVER['DOCUMENT_ROOT'];
 		//echo $baseUrl;exit;
-		if(unlink($baseUrl.'/lkmumy/'.$detail->p_file_path))
+		if(unlink($baseUrl.'/simatek/'.$detail->p_file_rab_path))
 		$this->db->where('p_id',$id);
 		$this->db->delete('proposal');
 
@@ -316,6 +320,17 @@ class Pengajuan extends MX_controller
 		else
 		{
 		    $this->db->trans_commit();
+
+		    $email = $this->db->query("SELECT * FROM proposal INNER JOIN user ON u_id = p_u_id WHERE p_id = ".$proposalId)->row()->u_email;
+
+		    $this->sendEmailProsesProposal( $trxId , $email );
+
+		    if ($_POST['status'] == '4')
+		    {
+		    	$emailWadek2 = $this->db->query("SELECT * FROM user_auth INNER JOIN role ON r_id = ua_r_id INNER JOIN user ON u_id = ua_u_id WHERE r_id = 4")->row()->u_email;
+		    	$this->sendEmailPengajuanProposal( $trxId , $emailWadek2 );
+		    }
+
 		    $this->session->set_flashdata('success', 'Proses Proposal Berhasil Di Ubah');
 		    redirect('proposal/pengajuan/daftar');
 		}
@@ -370,48 +385,35 @@ class Pengajuan extends MX_controller
         $this->db->where('tp_id',$trxId);
         $this->db->update('trx_pengajuan');
 
-        $setFileName = str_replace(' ', '_', $_POST['nama']);
-
-        $filename = $id.'_'.$setFileName.'.pdf';
-
-		$config['upload_path']          = './assets/rab';
-        $config['allowed_types']        = 'pdf|PDF';
-        $config['overwrite']           	= TRUE;
-        $config['max_size']            	= 3072;
-        $config['file_name'] 			= $filename;
-
-        $this->load->library('upload', $config);
-
-        /**if ( ! $this->upload->do_upload('files'))
+        if ($_FILES['filesRab']['name'] != '')
         {
-            $error = array('error' => $this->upload->display_errors());
-            $this->session->set_flashdata('errorf', $error);
-        }
-        else
-        {
+        	$setFileName = str_replace(' ', '_', $_POST['nama']);
 
-            $data = array('upload_data' => $this->upload->data());
+	        $filename = $id.'_'.$setFileName.'.pdf';
 
-            $this->db->set('p_file_path','assets/proposal/'.$filename);
-            $this->db->set('p_file',$filename);
-            $this->db->where('p_id',$id);
-            $this->db->update('proposal');
-        }**/
+			$config['upload_path']          = './assets/rab';
+	        $config['allowed_types']        = 'pdf|PDF';
+	        $config['overwrite']           	= TRUE;
+	        $config['max_size']            	= 3072;
+	        $config['file_name'] 			= $filename;
 
-        if ( ! $this->upload->do_upload('filesRab'))
-        {
-            $error = array('error' => $this->upload->display_errors());
-            $this->session->set_flashdata('errorf', $error);
-        }
-        else
-        {
+	        $this->load->library('upload', $config);
 
-            $data = array('upload_data' => $this->upload->data());
+	        if ( ! $this->upload->do_upload('filesRab'))
+	        {
+	            $error = array('error' => $this->upload->display_errors());
+	            $this->session->set_flashdata('errorf', $error);
+	        }
+	        else
+	        {
 
-            $this->db->set('p_file_rab_path','assets/rab/'.$filename);
-            $this->db->set('p_file_rab',$filename);
-            $this->db->where('p_id',$id);
-            $this->db->update('proposal');
+	            $data = array('upload_data' => $this->upload->data());
+
+	            $this->db->set('p_file_rab_path','assets/rab/'.$filename);
+	            $this->db->set('p_file_rab',$filename);
+	            $this->db->where('p_id',$id);
+	            $this->db->update('proposal');
+	        }
         }
 
         if ($this->db->trans_status() === FALSE)
@@ -423,6 +425,26 @@ class Pengajuan extends MX_controller
 		else
 		{
 		    $this->db->trans_commit();
+
+		    $isLkmProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_u_id = ".$_SESSION['userId'])->row()->ua_p_id;
+
+		    if ($isLkmProdi == '0')
+	        {
+	        	$dataKirim = $this->db->query("SELECT * FROM role INNER JOIN user_auth ON ua_r_id = r_id INNER JOIN user ON u_id = ua_u_id WHERE r_id = 4")->row()->u_email;
+	        }
+	        else
+	        {
+	        	$cariProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_u_id = ".$_SESSION['userId'])->row();
+
+	        	$isProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_is_prodi = 1 AND ua_p_id = ".$cariProdi->ua_p_id)->row();
+
+	        	//echo $this->db->last_query();
+
+	        	$dataKirim = $this->db->query("SELECT * FROM user WHERE u_id = ".$isProdi->ua_u_id)->row()->u_email;
+	        }
+
+		    $this->sendEmailRevisiProposal( $trxId , $dataKirim );
+
 		    $this->session->set_flashdata('success', 'Proposal Berhasil di Ajukan');
 		    redirect('proposal/pengajuan/daftar');
 		}
@@ -643,15 +665,18 @@ class Pengajuan extends MX_controller
 
 	}
 
-	function sendEmailPengajuanProposal( $proposalId , $userIdReceived )
+	function sendEmailPengajuanProposal( $trxPengajuanId , $email )
 	{
 		
+		$proposalId = $this->db->query("SELECT * FROM trx_pengajuan WHERE tp_id = ".$trxPengajuanId)->row()->tp_p_id;
 		$data = $this->db->query("SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id WHERE p_id = ".$proposalId)->row();
 
-		$dataTarget = $this->db->query("SELECT * FROM user WHERE u_id = ".$userIdReceived)->row();
+		//echo $this->db->last_query();exit;
+
+		//$dataTarget = $this->db->query("SELECT * FROM user WHERE u_id = ".$userIdReceived)->row();
 
 		$subject = "PENGAJUAN PROPOSAL";
-		$emailTo = $dataTarget->u_email;
+		$emailTo = $email;
 
 		$message = "";
 
@@ -693,6 +718,152 @@ class Pengajuan extends MX_controller
             //show_error($this->email->print_debugger());
         }
 
+	}
+
+	function sendEmailRevisiProposal( $trxPengajuanId , $email )
+	{
+		
+		$proposalId = $this->db->query("SELECT * FROM trx_pengajuan WHERE tp_id = ".$trxPengajuanId)->row()->tp_p_id;
+
+		$data = $this->db->query("SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id WHERE p_id = ".$proposalId)->row();
+
+		$subject = "PENGAJUAN PROSES PROPOSAL";
+		$emailTo = $email;
+
+		$message = "";
+
+		$message .= "PROPOSAL KEGIATAN DARI : <br />";
+		$message .= "Organisasi : ".$data->u_nama."<br />";
+		$message .= "Judul Kegiatan : ".$data->p_kegiatan."<br />";
+		$message .= "Status : <strong>Telah Di Perbaiki</strong><br />";
+		$message .= "<a href='".base_url()."' target='__blank'>Lebih Detail Login SIMATEK</a>";
+
+		$config = Array(
+                    'protocol'  => 'smtp',
+                    'smtp_host' => 'ssl://smtp.googlemail.com',
+                    'smtp_port' => '465',
+                    'smtp_user' => 'fauzinurdanang@gmail.com', 
+                    'smtp_pass' => 't3l0g0d0g', 
+                    'mailtype'  => 'html',
+                    'charset'   => 'iso-8859-1',
+                    'wordwrap'  => TRUE,
+                    'priority' => '1'
+                  );
+
+        //print_r($set);exit;
+        
+        $this->load->library('email', $config);
+        
+        $this->email->set_newline("\r\n");  
+        $this->email->from('no-reply@simatek.umy.ac.id'); 
+        $this->email->to($emailTo);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if($this->email->send())
+        {
+            $status = "success";
+        }
+        else
+        {
+            $status = $this->email->print_debugger();
+            //print_r($status);
+            //show_error($this->email->print_debugger());
+        }
+
+	}
+
+	function sendEmailProsesProposal( $trxPengajuanId , $email )
+	{
+		
+		$proposal = $this->db->query("SELECT * FROM trx_pengajuan WHERE tp_id = ".$trxPengajuanId)->row();
+		
+		$data = $this->db->query("SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id WHERE p_id = ".$proposal->tp_p_id)->row();
+
+		$statusProposal = $this->statusPengajuan($proposal->tp_status);
+		
+		$subject = "PENGAJUAN PROSES PROPOSAL";
+		$emailTo = $email;
+
+		$message = "";
+
+		$message .= "PROPOSAL KEGIATAN DARI : <br />";
+		$message .= "Organisasi : ".$data->u_nama."<br />";
+		$message .= "Judul Kegiatan : ".$data->p_kegiatan."<br />";
+		$message .= "Status : <strong>".$statusProposal."</strong><br />";
+		$message .= "<a href='".base_url()."' target='__blank'>Lebih Detail Login SIMATEK</a>";
+
+		$config = Array(
+                    'protocol'  => 'smtp',
+                    'smtp_host' => 'ssl://smtp.googlemail.com',
+                    'smtp_port' => '465',
+                    'smtp_user' => 'fauzinurdanang@gmail.com', 
+                    'smtp_pass' => 't3l0g0d0g', 
+                    'mailtype'  => 'html',
+                    'charset'   => 'iso-8859-1',
+                    'wordwrap'  => TRUE,
+                    'priority' => '1'
+                  );
+
+        //print_r($set);exit;
+        
+        $this->load->library('email', $config);
+        
+        $this->email->set_newline("\r\n");  
+        $this->email->from('no-reply@simatek.umy.ac.id'); 
+        $this->email->to($emailTo);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if($this->email->send())
+        {
+            $status = "success";
+        }
+        else
+        {
+            $status = $this->email->print_debugger();
+            print_r($status);
+            show_error($this->email->print_debugger());
+        }
+
+	}
+
+	function statusPengajuan( $statusId )
+	{
+		switch ($statusId) 
+		{
+			case '0':
+				return 'waiting prodi';
+				break;
+			
+			case '1':
+				return 'acc prodi';
+				break;
+
+			case '2':
+				return 'ditolak prodi';
+				break;
+
+			case '3':
+				return 'revisi prodi';
+				break;
+
+			case '4':
+				return 'waiting fakultas';
+				break;
+
+			case '5':
+				return 'acc fakultas';
+				break;
+
+			case '6':
+				return 'ditolak fakultas';
+				break;
+
+			case '7':
+				return 'revisi fakultas';
+				break;
+		}
 	}
 	
 }
