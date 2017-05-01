@@ -20,6 +20,7 @@
 <script src="<?php echo base_url() ?>assets/vendors/iCheck/custom.min.js"></script>
 <script src="<?php echo base_url() ?>assets/vendors/jquery-news-ticker/jquery.news-ticker.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.menu.js"></script>
+<script src="<?php echo base_url() ?>assets/js/jquery.priceformat.min.js"></script>
 <script src="<?php echo base_url() ?>assets/vendors/jquery-pace/pace.min.js"></script>
 <script src="<?php echo base_url() ?>assets/vendors/holder/holder.js"></script>
 <script src="<?php echo base_url() ?>assets/vendors/responsive-tabs/responsive-tabs.js"></script>

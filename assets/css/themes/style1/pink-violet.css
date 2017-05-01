@@ -1552,7 +1552,8 @@ ul.chats li.out .message a.chat-datetime {
   text-decoration: underline;
 }
 #signin-page {
-  background: url('../../../images/bg/1.jpg') center center fixed;
+  /*background: url('../../../images/bg/1.jpg') center center fixed;*/
+  background-color: #0079C3;
   -moz-background-size: cover;
   -webkit-background-size: cover;
   -o-background-size: cover;

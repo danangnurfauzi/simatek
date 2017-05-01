@@ -55,13 +55,13 @@ class Pengajuan extends MX_controller
 	function add()
 	{
 		$data['jenis'] = $this->db->query('SELECT * FROM jenis_kegiatan');
-		$this->load->view('add_view',$data);	
+		$this->load->view('add_view',$data);
 	}
 
 	function insert()
 	{
 		
-		$this->db->trans_begin();
+		$this->db->trans_begin(); //echo "<pre>"; print_r($_POST);exit;
 
 		$isLkmProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_u_id = ".$_SESSION['userId'])->row()->ua_p_id;
 
@@ -76,7 +76,7 @@ class Pengajuan extends MX_controller
         $this->db->set('p_handphone',$_POST['hp']);
         $this->db->set('p_tanggal_mulai',$_POST['tanggalMulai']);
         $this->db->set('p_tanggal_selesai',$_POST['tanggalSelesai']);
-        $this->db->set('p_biaya',$_POST['biaya']);
+        $this->db->set('p_biaya',str_replace('.', '', $_POST['biaya']));
         $this->db->set('p_latar_belakang',$_POST['latarBelakang']);
         $this->db->set('p_luaran',$_POST['luaran']);
         $this->db->set('p_penanggung_jawab1',$_POST['penanggungJawab1']);
@@ -192,8 +192,8 @@ class Pengajuan extends MX_controller
 		$this->db->trans_begin();
 
         $this->db->set('p_jk_id',$_POST['jenisKegiatan']);
-        $this->db->set('p_lingkup',$_POST['lingkupKegiatan']);
         $this->db->set('p_kegiatan',$_POST['nama']);
+        $this->db->set('p_lingkup',$_POST['lingkupKegiatan']);
         $this->db->set('p_tujuan',$_POST['tujuan']);
         $this->db->set('p_tempat',$_POST['tempat']);
         $this->db->set('p_penanggung_jawab',$_POST['penanggungJawab']);
@@ -201,7 +201,15 @@ class Pengajuan extends MX_controller
         $this->db->set('p_handphone',$_POST['hp']);
         $this->db->set('p_tanggal_mulai',$_POST['tanggalMulai']);
         $this->db->set('p_tanggal_selesai',$_POST['tanggalSelesai']);
-        $this->db->set('p_biaya',$_POST['biaya']);
+        $this->db->set('p_biaya',str_replace('.', '', $_POST['biaya']));
+        $this->db->set('p_latar_belakang',$_POST['latarBelakang']);
+        $this->db->set('p_luaran',$_POST['luaran']);
+        $this->db->set('p_penanggung_jawab1',$_POST['penanggungJawab1']);
+        $this->db->set('p_handphone1',$_POST['hp1']);
+        $this->db->set('p_is_pihak_luar',$_POST['statusPihakLuar']);
+        $this->db->set('p_pihak_luar_nama',$_POST['namaPihakLuar']);
+        $this->db->set('p_pihak_luar_telephone',$_POST['nomorPihakLuar']);
+        $this->db->set('p_pihak_luar_instansi',$_POST['organisasiPihakLuar']);
         $this->db->set('p_updated',date('Y-m-d H:i:j'));
         $this->db->where('p_id',$id);
         $this->db->update('proposal');
@@ -288,6 +296,7 @@ class Pengajuan extends MX_controller
 										INNER JOIN role ON r_id = ua_r_id
 										WHERE tp_catatan IS NOT NULL AND tp_p_id = '.$id);
 		//echo $this->db->last_query();exit;
+		$data['anggaran'] = $this->db->query('SELECT * FROM anggaran_master_kegiatan WHERE amk_is_deleted = 0');
 
 		$this->load->view('proses_view',$data);
 	}
@@ -306,7 +315,8 @@ class Pengajuan extends MX_controller
 		$trxId = $this->db->insert_id();
 
 		$this->db->set('p_status',$_POST['status']);
-		$this->db->set('p_biaya_realisasi',$_POST['biayaRealisasi']);
+		$this->db->set('p_biaya_mata_anggaran_temp',str_replace('.' , '' , $_POST['biayaRealisasi']) );
+		$this->db->set('p_biaya_amk_id',$_POST['amkId']);
 		$this->db->set('p_tp_id',$trxId);
 		$this->db->where('p_id',$proposalId);
 		$this->db->update('proposal');
@@ -449,6 +459,11 @@ class Pengajuan extends MX_controller
 		    redirect('proposal/pengajuan/daftar');
 		}
 
+	}
+
+	function prosesProposalMataAnggaran( $proposalId )
+	{
+		
 	}
 
 	function cetakBuktiApproval( $proposalId )
@@ -862,6 +877,14 @@ class Pengajuan extends MX_controller
 
 			case '7':
 				return 'revisi fakultas';
+				break;
+
+			case '8':
+				return 'acc fakultas';
+				break;
+
+			case '9':
+				return 'ditolak fakultas';
 				break;
 		}
 	}

@@ -32,11 +32,11 @@
                     </li>
                     <li><a href="#"><i class="fa fa-money">
                         <div class="icon-bg bg-red"></div>
-                    </i><span class="menu-title">Manajemen Anggaran</span><span class="fa arrow"></span></a>
+                    </i><span class="menu-title">Mata Anggaran</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="<?php echo site_url('anggaran/rancangan/jenis') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Jenis Anggaran</span></a></li>
                             <li><a href="<?php echo site_url('anggaran/rancangan/set') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Set Anggaran</span></a></li>
-                            <li><a href="<?php echo site_url('anggaran/rancangan/relasi') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Relasi Anggaran</span></a></li>
+                            <!--li><a href="<?php echo site_url('anggaran/rancangan/relasi') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Relasi Anggaran</span></a></li-->
                             <li><a href="<?php echo site_url('anggaran/realisasi/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Realisasi Anggaran</span></a></li>
                         </ul>
                     </li>

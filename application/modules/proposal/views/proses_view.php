@@ -238,7 +238,23 @@
                                         <div class="form-group" id="formBiayaReal" style="display: none;">
                                             <label for="inputAddress" class="col-md-3 control-label">Biaya Yang Diberikan</label>
                                             <div class="col-md-9">
-                                                </i><input name="biayaRealisasi" placeholder="" class="form-control" type="number">
+                                                </i><input name="biayaRealisasi" placeholder="" class="form-control" id="rupiah">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="mata">
+                                            <label class="col-md-3 control-label">Mata Anggaran</label>
+                                            <div class="col-md-9">
+                                                <select name="amkId" class="form-control">
+                                                    <option>------PILIH SALAH SATU------</option>
+                                                    <?php if($anggaran->num_rows() > 0){ 
+                                                            foreach($anggaran->result() as $row){
+                                                    ?>
+                                                    <option value="<?php echo $row->amk_id?>"><?php echo $row->amk_nama ?></option>
+                                                    <?php
+                                                            }
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <?php } ?>
@@ -269,19 +285,29 @@
     $('#catatan').wysihtml5();
 
     <?php if($_SESSION['roleId'] == '4'){ ?>
+    $('#mata').hide();
     $('#status').change(function(){
         var set = $(this).val();
         
         if (set == 5)
         {
             $('#formBiayaReal').show();
+            $('#mata').show();
         }
         else
         {
             $('#formBiayaReal').hide();
+            $('#mata').hide();
         }
     });
     <?php } ?>
+
+    $('#rupiah').priceFormat({
+        prefix: '',
+        thousandsSeparator: '.',
+        clearOnEmpty: true,
+        centsLimit: 0
+    });
 
 </script>
 

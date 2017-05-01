@@ -21,7 +21,7 @@
 <body id="signin-page">
 <div class="page-form">
     <form action="<?php echo site_url('auth/login/validate') ?>" class="form" method="post">
-        <div class="header-content"><h1>Log In</h1></div>
+        <div class="header-content"><h1>Log In SIMATEK</h1></div>
         <div class="body-content">
 
             <?php $err = $this->session->flashdata('error'); if(isset($err)){ ?>

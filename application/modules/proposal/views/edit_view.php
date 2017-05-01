@@ -23,7 +23,7 @@
                                 <form action="<?php echo site_url('proposal/pengajuan/update/'.$proposal->p_id) ?>" class="form-horizontal" method="post" enctype="multipart/form-data">
                                     <div class="form-body pal">
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label">Jenis Kegiatan<span class="require">*</span></label>
+                                            <label class="col-md-3 control-label">Jenis Kegiatan<span class="require">* <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i></span></label>
                                             <div class="col-md-9">
                                                 <select name="jenisKegiatan" class="form-control">
                                                     <option>------PILIH SALAH SATU------</option>
@@ -39,7 +39,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label">Lingkup Kegiatan<span class="require">*</span></label>
+                                            <label class="col-md-3 control-label">Lingkup Kegiatan<span class="require">* <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i></span></label>
                                             <div class="col-md-9">
                                                 <select name="lingkupKegiatan" class="form-control">
                                                     <option>------PILIH SALAH SATU------</option>
@@ -51,13 +51,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label">Nama Kegiatan<span class="require">*</span></label>
+                                            <label class="col-md-3 control-label">Judul Kegiatan<span class="require">* <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i></span></label>
                                             <div class="col-md-9">
                                                 <input name="nama" placeholder="" class="form-control" type="text" value="<?php echo $proposal->p_kegiatan ?>" required>
                                             </div>
                                         </div>
+                                        <div class="form-group mbn"><label for="inputContent" class="col-md-3 control-label">Latar Belakang<span class="require">* <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i></span></label>
+                                            <div class="col-md-9"><textarea name="latarBelakang" id="latarBelakang" rows="3" class="form-control" required><?php echo $proposal->p_latar_belakang ?></textarea></div>
+                                        </div>
+                                        <br/>
                                         <div class="form-group mbn"><label for="inputContent" class="col-md-3 control-label">Tujuan Kegiatan<span class="require">*</span></label>
                                             <div class="col-md-9"><textarea name="tujuan" id="tujuan" rows="3" class="form-control" required><?php echo $proposal->p_tujuan ?></textarea></div>
+                                        </div>
+                                        <br/>
+                                        <div class="form-group mbn"><label for="inputContent" class="col-md-3 control-label">Luaran<span class="require">* <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i></span></label>
+                                            <div class="col-md-9"><textarea name="luaran" id="luaran" rows="3" class="form-control"  required><?php echo $proposal->p_luaran ?></textarea></div>
                                         </div>
                                         <br/>
                                         <div class="form-group">
@@ -67,33 +75,60 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputEmail" class="col-md-3 control-label">Penanggung Jawab<span class="require">*</span></label>
-                                            <div class="col-md-9">
-                                                <input name="penanggungJawab" placeholder="" class="form-control" type="text" value="<?php echo $proposal->p_penanggung_jawab ?>" required>
+                                            <label for="inputEmail" class="col-md-3 control-label">Penanggung Jawab<span class="require">* <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i></span></label>
+                                            <div class="col-md-4">
+                                                <input name="penanggungJawab" placeholder="nama lengkap" class="form-control" type="text" value="<?php echo $proposal->p_penanggung_jawab ?>" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input name="hp" placeholder="nomor telp" class="form-control" type="number" value="<?php echo $proposal->p_handphone ?>" required>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputEmail" class="col-md-3 control-label">Nomor Handphone<span class="require">*</span></label>
-                                            <div class="col-md-9">
-                                                <input name="hp" placeholder="" class="form-control" type="number" value="<?php echo $proposal->p_handphone ?>" required>
+                                            <label for="inputEmail" class="col-md-3 control-label"></label>
+                                            <div class="col-md-4">
+                                                <input name="penanggungJawab1" placeholder="nama lengkap" class="form-control" type="text" value="<?php echo $proposal->p_penanggung_jawab1 ?>">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input name="hp1" placeholder="nomor telp" class="form-control" type="number" value="<?php echo $proposal->p_handphone1 ?>">
                                             </div>
                                         </div>
                                         <br/>
                                         <div class="form-group">
-                                            <label for="inputEmail" class="col-md-3 control-label">Tanggal Mulai<span class="require">*</span></label>
-                                            <div class="col-md-9">
-                                                <input name="tanggalMulai" placeholder="" class="form-control" type="text" id="mulai" value="<?php echo $proposal->p_tanggal_mulai ?>" required>
+                                            <label for="inputEmail" class="col-md-3 control-label">Waktu<span class="require">* <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i></span></label>
+                                            <div class="col-md-4">
+                                                <input name="tanggalMulai" placeholder="Tanggal Mulai" class="form-control" type="text" id="mulai" value="<?php echo $proposal->p_tanggal_mulai ?>" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input name="tanggalSelesai" placeholder="Tanggal Selesai" class="form-control" type="text" id="selesai" value="<?php echo $proposal->p_tanggal_selesai ?>" required>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputEmail" class="col-md-3 control-label">Tanggal Selesai<span class="require">*</span></label>
+                                            <label class="col-md-3 control-label">Pihak Luar Yang Terlibat<span class="require">* <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i></span></label>
                                             <div class="col-md-9">
-                                                <input name="tanggalSelesai" placeholder="" class="form-control" type="text" id="selesai" value="<?php echo $proposal->p_tanggal_selesai ?>" required>
+                                                <select name="statusPihakLuar" class="form-control" id="statusPihakLuar">
+                                                    <option>------PILIH SALAH SATU------</option>
+                                                    <option value="1" <?php echo ($proposal->p_is_pihak_luar == 1) ? 'selected="selected"' : '' ?>>Tidak Ada</option>
+                                                    <option value="2" <?php echo ($proposal->p_is_pihak_luar == 2) ? 'selected="selected"' : '' ?>>Ada</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="form-group"><label for="inputAddress" class="col-md-3 control-label">Total Anggaran<span class="require">*</span></label>
+                                        <div id="formPihakLuar" style="display: none;">
+                                            <div class="form-group">
+                                                <label for="inputEmail" class="col-md-3 control-label"></label>
+                                                <div class="col-md-3">
+                                                    <input name="namaPihakLuar" placeholder="Nama" class="form-control" type="text" id="namaPihakLuar" value="<?php echo $proposal->p_pihak_luar_nama ?>">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input name="nomorPihakLuar" placeholder="Nomor Telp" class="form-control" type="text" id="nomorPihakLuar" value="<?php echo $proposal->p_pihak_luar_telephone ?>">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input name="organisasiPihakLuar" placeholder="Nama Organisasi/Instansi" class="form-control" type="text" id="organisasiPihakLuar" value="<?php echo $proposal->p_pihak_luar_instansi ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group"><label for="inputAddress" class="col-md-3 control-label">Total Anggaran<span class="require">* <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i></span></label>
                                             <div class="col-md-9">
-                                                </i><input name="biaya" placeholder="" class="form-control" type="number" value="<?php echo $proposal->p_biaya ?>" required>
+                                                </i><input name="biaya" placeholder="" class="form-control" value="<?php echo $proposal->p_biaya ?>" required id="rupiah">
                                             </div>
                                         </div>
                                         <br/>
@@ -104,7 +139,7 @@
                                                 <p class="help-block">file dengan ekstensi pdf, dengan maksimal ukuran file 3MB.</p>
                                             </div>
                                         </div>
-                                        <div class="form-group mbn"><label for="inputContent" class="col-md-3 control-label">Informasi Tambahan</label>
+                                        <div class="form-group mbn"><label for="inputContent" class="col-md-3 control-label">Informasi Tambahan <i class="fa fa-exclamation-circle" data-toggle="tooltip" data-placement="right" data-original-title="Keterangan"></i><</label>
                                             <div class="col-md-9"><textarea name="ringkasan" id="ringkasan" rows="3" class="form-control"><?php echo $proposal->p_ringkasan ?></textarea></div>
                                         </div>
                                     </div>
@@ -138,6 +173,42 @@
     });
 
     $('#ringkasan').wysihtml5();
+    $('#tujuan').wysihtml5();
+    $('#latarBelakang').wysihtml5();
+    $('#luaran').wysihtml5();
+
+    $('#rupiah').priceFormat({
+        prefix: '',
+        thousandsSeparator: '.',
+        clearOnEmpty: true,
+        centsLimit: 0
+    });
+
+    $('#statusPihakLuar').change(function(){
+        var idStatus = $(this).val();
+        //alert(idStatus);
+        if ( idStatus == 1) 
+        {
+            $("#formPihakLuar").hide();
+            $("#namaPihakLuar").prop("required",false);
+            $("#nomorPihakLuar").prop("required",false);
+            $("#organisasiPihakLuar").prop("required",false);
+        }
+        else
+        {
+            $("#formPihakLuar").show();
+            $("#namaPihakLuar").prop("required",true);
+            $("#nomorPihakLuar").prop("required",true);
+            $("#organisasiPihakLuar").prop("required",true);
+        }
+    })
+
+    <?php if($proposal->p_is_pihak_luar == 2){ ?>
+        $("#formPihakLuar").show();
+        $("#namaPihakLuar").prop("required",true);
+        $("#nomorPihakLuar").prop("required",true);
+        $("#organisasiPihakLuar").prop("required",true);
+    <?php } ?>
 </script>
 
 </body>

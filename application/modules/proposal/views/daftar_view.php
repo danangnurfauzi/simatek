@@ -5,14 +5,16 @@
 <?php
     
     $status = array( 
-        '0' => '<span class="label label-sm label-warning">Tunggu Proses Prodi</span>',
-        '1' => '<span class="label label-sm label-info">Disetujui Oleh Prodi</span>',
+        '0' => '<span class="label label-sm label-warning">Tunggu Persetujuan Prodi</span>',
+        '1' => '<span class="label label-sm label-info">Telah di Setujui Prodi</span>',
         '2' => '<span class="label label-sm label-danger">Di Tolak Prodi</span>',
         '3' => '<span class="label label-sm label-warning">Harap Di Perbaiki (Prodi)</span>',
-        '4' => '<span class="label label-sm label-warning">Tunggu Proses Fakultas</span>',
-        '5' => '<span class="label label-sm label-info">Disetujui Oleh Fakultas</span>',
-        '6' => '<span class="label label-sm label-danger">Di Tolak Fakultas</span>',
-        '7' => '<span class="label label-sm label-warning">Harap Di Perbaiki (Fakultas)</span>',
+        '4' => '<span class="label label-sm label-warning">Tunggu Persetujuan Fakultas 1</span>',
+        '5' => '<span class="label label-sm label-warning">Tunggu Persetujan Fakultas 2</span>',
+        '6' => '<span class="label label-sm label-danger">Di Tolak Fakultas 1</span>',
+        '7' => '<span class="label label-sm label-warning">Harap Di Perbaiki (Fakultas 1)</span>',
+        '8' => '<span class="label label-sm label-info">Telah di Setujui Fakultas 2</span>',
+        '9' => '<span class="label label-sm label-danger">Di Tolak Fakultas 2</span>',
          );
 
     $roleUser = array('1','3','4','5');
@@ -192,12 +194,64 @@
                                                     ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?php echo site_url('proposal/pengajuan/edit/'.$row->p_id) ?>"><span class="label label-violet">Ubah</span></a>
-                                                    <a href="<?php echo site_url('proposal/pengajuan/delete/'.$row->p_id) ?>" onclick="return confirm('Yakin Akan Di Hapus')"><span class="label label-red">Hapus</span></a>
-                                                    <?php if($row->p_status == 5){ ?>
-                                                    <a target="__blank" href="<?php echo site_url('proposal/pengajuan/cetakBuktiApproval/'.$row->p_id) ?>"><span class="label label-green">Cetak Bukti Persetujuan</span></a>
-                                                     <a href="<?php echo site_url('proposal/pengajuan/complete/'.$row->p_id) ?>"><span class="label label-orange">Lengkapi Syarat</span></a>
+
+                                                    <?php if(in_array($_SESSION['roleId'],$roleUser)){ 
+                                                            switch ($_SESSION['roleId']) {
+                                                                case '5':
+                                                                    if($row->p_status == 0){
+                                                    ?>
+                                                                        <a href="<?php echo site_url('proposal/pengajuan/proses/'.$row->p_id) ?>">
+                                                                            <span class="label label-sm label-danger">Review Proposal</span>
+                                                                        </a>
+                                                    <?php
+                                                                    }
+
+                                                    ?>
+
+                                                    <?php
+                                                                    break;
+
+                                                                case '4':
+                                                                    if($row->p_status == 4){
+                                                    ?>
+                                                                        <a href="<?php echo site_url('proposal/pengajuan/proses/'.$row->p_id) ?>">
+                                                                            <span class="label label-sm label-danger">Review Proposal</span>
+                                                                        </a>
+                                                    <?php
+                                                                    }
+
+                                                                    break;
+
+                                                                case '3':
+                                                                    if($row->p_status == 5){
+                                                    ?>
+                                                                        <a href="<?php echo site_url('proposal/pengajuan/prosesProposalMataAnggaran/'.$row->p_id) ?>">
+                                                                            <span class="label label-sm label-danger">Review Mata Anggaran</span>
+                                                                        </a>
+                                                    <?php
+                                                                    }
+                                                            }
+                                                    ?>
+
+
+
+                                                    <?php }else{ ?>
+
+                                                        <a href="<?php echo site_url('proposal/pengajuan/edit/'.$row->p_id) ?>">
+                                                            <span class="label label-violet">Ubah</span>
+                                                        </a>
+
+                                                        <a href="<?php echo site_url('proposal/pengajuan/delete/'.$row->p_id) ?>" onclick="return confirm('Yakin Akan Di Hapus')">
+                                                            <span class="label label-red">Hapus</span>
+                                                        </a>
+
+                                                        <?php if($row->p_status == 5){ ?>
+                                                        <a target="__blank" href="<?php echo site_url('proposal/pengajuan/cetakBuktiApproval/'.$row->p_id) ?>"><span class="label label-green">Cetak Bukti Persetujuan</span></a>
+                                                         <a href="<?php echo site_url('proposal/pengajuan/complete/'.$row->p_id) ?>"><span class="label label-orange">Lengkapi Syarat</span></a>
+                                                        <?php } ?>
+
                                                     <?php } ?>
+
                                                 </td>
 
                                             </tr>
