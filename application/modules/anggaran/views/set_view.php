@@ -32,7 +32,7 @@
                         <?php } ?>
 
                         <div class="panel panel-blue">
-                            <div class="panel-heading">Set Nilai Jenis Anggaran</div>
+                            <div class="panel-heading">Set Nilai Mata Anggaran</div>
                             <div class="panel-body">
                                 
                                 <!--a href="<?php echo site_url('anggaran/rancangan/add') ?>" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a><br/><br/-->
@@ -63,7 +63,7 @@
                                         </div>
                                         <div class="form-group"><label for="inputUsername" class="col-md-3 control-label">Nilai Anggaran <span class="require">*</span></label>
                                             <div class="col-md-9">
-                                                <div class="input"><input name="nilai" class="form-control" type="number"></div>
+                                                <div class="input"><input name="nilai" class="form-control" type="text" id="rupiah"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                                         <thead>
                                         <tr>
                                             <th>Tahun</th>
-                                            <th>Jenis Anggaran</th>
+                                            <th>Mata Anggaran</th>
                                             <th>Nilai Anggaran</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -120,6 +120,13 @@
     $(document).ready(function() {
         $('#tabel').DataTable();
     } );
+
+    $('#rupiah').priceFormat({
+        prefix: '',
+        thousandsSeparator: '.',
+        clearOnEmpty: true,
+        centsLimit: 0
+    });
 </script>
 
 </body>

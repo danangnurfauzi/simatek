@@ -19,6 +19,7 @@
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/calendar/zabuto_calendar.min.css">
     <!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/DataTables/DataTables-1.10.13/css/jquery.dataTables.min.css">
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/DataTables/TableTools-2.2.4/css/dataTables.tableTools.min.css">
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/bootstrap-datepicker/css/datepicker.css">
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?php echo base_url() ?>assets/vendors/jquery-pace/pace.css">

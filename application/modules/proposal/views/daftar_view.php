@@ -245,7 +245,7 @@
                                                             <span class="label label-red">Hapus</span>
                                                         </a>
 
-                                                        <?php if($row->p_status == 5){ ?>
+                                                        <?php if($row->p_status == 8){ ?>
                                                         <a target="__blank" href="<?php echo site_url('proposal/pengajuan/cetakBuktiApproval/'.$row->p_id) ?>"><span class="label label-green">Cetak Bukti Persetujuan</span></a>
                                                          <a href="<?php echo site_url('proposal/pengajuan/complete/'.$row->p_id) ?>"><span class="label label-orange">Lengkapi Syarat</span></a>
                                                         <?php } ?>

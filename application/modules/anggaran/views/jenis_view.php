@@ -32,14 +32,14 @@
                         <?php } ?>
 
                         <div class="panel panel-blue">
-                            <div class="panel-heading">Master Jenis Anggaran</div>
+                            <div class="panel-heading">Master Mata Anggaran</div>
                             <div class="panel-body">
                                 
                                 <!--a href="<?php echo site_url('anggaran/rancangan/add') ?>" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a><br/><br/-->
 
                                 <form action="<?php echo site_url('anggaran/rancangan/insert') ?>" method="post" class="form-horizontal">
                                     <div class="form-body pal">
-                                        <div class="form-group"><label for="inputUsername" class="col-md-3 control-label">Nama Jenis Anggaran <span class="require">*</span></label>
+                                        <div class="form-group"><label for="inputUsername" class="col-md-3 control-label">Nama Mata Anggaran <span class="require">*</span></label>
                                             <div class="col-md-9">
                                                 <div class="input"><input name="nama" class="form-control" type="text"></div>
                                             </div>

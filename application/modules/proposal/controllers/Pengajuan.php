@@ -461,9 +461,88 @@ class Pengajuan extends MX_controller
 
 	}
 
-	function prosesProposalMataAnggaran( $proposalId )
+	function prosesProposalMataAnggaran( $id )
 	{
-		
+		$proposal = $this->db->query('SELECT * FROM proposal WHERE p_id = '.$id)->row();
+		$data['proposal'] = $proposal;
+		$data['jenis'] = $this->db->query('SELECT * FROM jenis_kegiatan');
+		$data['mataAnggaran'] = $this->db->query('SELECT * FROM anggaran_master_kegiatan WHERE amk_id = '.$proposal->p_biaya_amk_id)->row()->amk_nama;
+		$data['anggaran'] = $this->db->query('SELECT * FROM anggaran_master_kegiatan WHERE amk_is_deleted = 0');
+
+		$this->load->view('prosesProposalMataAnggaran_view',$data);
+	}
+
+	function prosesSetMataAnggaranProposal($id)
+	{
+		//echo "<pre>";
+		//print_r($_POST);
+
+		$jumlah = 0;
+
+		for ($i=0; $i < count($_POST['angka']) ; $i++) { 
+			$rupi = $_POST['angka'][$i];
+
+			$jumlah = $jumlah + str_replace('.', '', $rupi);
+
+			$data[] = array(
+					'pma_p_id' => $id,
+					'pma_amk_id' => $_POST['amk_id'][$i],
+					'pma_angka' => $rupi,
+					'pma_created' => date('Y-m-d H:i:j')
+				);
+		}
+
+		//echo $jumlah;
+		//echo "<pre>";
+		//print_r($data);
+		//exit;
+
+		$rencana = $this->db->query("SELECT p_biaya_mata_anggaran_temp FROM proposal WHERE p_id = ".$id)->row()->p_biaya_mata_anggaran_temp;
+
+		//echo $rencana;exit;
+
+		if ($jumlah > $rencana) 
+		{
+			$this->session->set_flashdata('error', 'Maaf Setting Mata Anggaran Anda Melebihi Rencana Anggaran Yang di Tentukan');
+		    redirect('proposal/pengajuan/prosesProposalMataAnggaran/'.$id);
+		}
+		else
+		{
+
+			$this->db->trans_begin();
+
+			$this->db->set('tp_p_id',$id);
+			$this->db->set('tp_u_id',$_SESSION['userId']);
+			$this->db->set('tp_status',$_POST['status']);
+			$this->db->set('tp_created',date('Y-m-d H:i:j'));
+			$this->db->insert('trx_pengajuan');
+
+			$trxId = $this->db->insert_id();
+
+			$this->db->set('p_biaya_realisasi',$jumlah);
+			$this->db->set('p_status',$_POST['status']);
+			$this->db->set('p_tp_id',$trxId);
+			$this->db->where('p_id',$id);
+			$this->db->update('proposal');
+
+			//$ins = array($data);
+
+			$this->db->insert_batch('proposal_mata_anggaran', $data);
+
+			if ($this->db->trans_status() === FALSE)
+			{
+			    $this->db->trans_rollback();
+			    $this->session->set_flashdata('error', 'Terjadi Kesalahan Sistem');
+			    redirect('proposal/pengajuan/daftar');
+			}
+			else
+			{
+			    $this->db->trans_commit();
+			    $this->session->set_flashdata('success', 'Proposal Berhasil di Set Mata Anggarannya');
+			    redirect('proposal/pengajuan/daftar');
+			}
+		}
+
 	}
 
 	function cetakBuktiApproval( $proposalId )

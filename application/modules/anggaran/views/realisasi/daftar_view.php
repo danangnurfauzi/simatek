@@ -27,7 +27,7 @@
                         <?php } ?>
 
                         <div class="panel panel-blue">
-                            <div class="panel-heading">Daftar Jenis Anggaran</div>
+                            <div class="panel-heading">Daftar Mata Anggaran</div>
                             <div class="panel-body">
                                 
                                 <div class="table-responsive">
@@ -35,7 +35,7 @@
                                         <thead>
                                         <tr>
                                             <th>Tahun</th>
-                                            <th>Jenis Anggaran</th>
+                                            <th>Mata Anggaran</th>
                                             <th>Besar Anggaran</th>
                                             <th>Realisasi</th>
                                         </tr>
@@ -74,7 +74,13 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tabel').DataTable();
+        var table = $('#tabel').DataTable( {
+                        "dom": 'T<"clear">lfrtip',
+                        "tableTools": {
+                            "sSwfPath": "../../assets/vendors/DataTables/TableTools-2.2.4/swf/copy_csv_xls_pdf.swf",
+                            "aButtons": [ "xls", "pdf" , "print" ]
+                        }
+                    } );
     } );
 </script>
 

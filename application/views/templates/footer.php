@@ -26,6 +26,7 @@
 <script src="<?php echo base_url() ?>assets/vendors/responsive-tabs/responsive-tabs.js"></script>
 <script src="<?php echo base_url() ?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <script src="<?php echo base_url() ?>assets/vendors/DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url() ?>assets/vendors/DataTables/TableTools-2.2.4/js/dataTables.tableTools.min.js"></script>
 <script src="<?php echo base_url() ?>assets/vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
 <!--script src="<?php echo base_url() ?>assets/vendors/intro.js/intro.js"></script-->

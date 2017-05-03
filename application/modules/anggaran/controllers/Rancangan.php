@@ -152,7 +152,7 @@ class Rancangan extends MX_controller
 
 		$this->db->set('abk_amk_id',$_POST['jenisAnggaran']);
 		$this->db->set('abk_tahun',$_POST['tahun']);
-		$this->db->set('abk_nilai',$_POST['nilai']);
+		$this->db->set('abk_nilai',str_replace('.', '', $_POST['nilai']) );
 		$this->db->set('abk_created', date('Y-m-d H:i:j'));
 		$this->db->insert('anggaran_biaya_kegiatan');
 
