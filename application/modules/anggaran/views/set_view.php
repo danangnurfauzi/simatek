@@ -51,7 +51,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label">Jenis Anggaran<span class="require">*</span></label>
+                                            <label class="col-md-3 control-label">Mata Anggaran<span class="require">*</span></label>
                                             <div class="col-md-9">
                                                 <select name="jenisAnggaran" class="form-control" required>
                                                     <option>------PILIH SALAH SATU------</option>
@@ -74,6 +74,25 @@
                                         </div>
                                     </div>
                                 </form> <br/><br />
+
+                                <form action="<?php echo current_url() ?>" method="post" class="form-horizontal">
+                                    <div class="form-body pal">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Filter Tahun</label>
+                                            <div class="col-md-6">
+                                                <select name="tahun" class="form-control" required>
+                                                    <option>------PILIH SALAH SATU------</option>
+                                                    <?php foreach($tahun->result() as $row) { ?>
+                                                        <option value="<?php echo $row->TAHUN ?>" <?php echo ($selected == $row->TAHUN) ? "selected='selected'" : "" ?>><?php echo $row->TAHUN ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                            <input type="submit" class="btn btn-primary" name="submit" value="SUBMIT">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                                 
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered table-hover" id="tabel">
@@ -118,7 +137,13 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tabel').DataTable();
+        $('#tabel').DataTable({
+            "dom": 'T<"clear">lfrtip',
+            "tableTools": {
+                "sSwfPath": "../../assets/vendors/DataTables/TableTools-2.2.4/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [ "xls", "pdf" , "print" ]
+            }
+        });
     } );
 
     $('#rupiah').priceFormat({

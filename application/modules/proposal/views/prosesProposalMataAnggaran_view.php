@@ -44,6 +44,39 @@
                                                 <h3 class="text-green"><?php echo $jenisKegiatan ?></h3>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Lingkup Kegiatan</label>
+                                            <div class="col-md-9">
+                                                <?php
+                                                    switch ($proposal->p_lingkup)
+                                                    {
+                                                        case '1':
+                                                            $lingkup = 'INTERNAL';
+                                                            break;
+                                                        
+                                                        case '2':
+                                                            $lingkup = 'REGIONAL';
+                                                            break;
+
+                                                        case '3':
+                                                            $lingkup = 'NASIONAL';
+                                                            break;
+
+                                                        case '4':
+                                                            $lingkup = 'INTERNASIONAL';
+                                                            break;
+                                                    }
+                                                ?>
+                                                <h3 class="text-green"><?php echo $lingkup ?></h3>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Judul Kegiatan</label>
+                                            <div class="col-md-9">
+                                                <h3 class="text-green"><?php echo $proposal->p_kegiatan ?></h3>
+                                                <!--input name="nama" placeholder="" class="form-control" type="text" value="<?php echo $proposal->p_kegiatan ?>" disabled-->
+                                            </div>
+                                        </div>
                                         <br/>
                                         <div class="form-group"><label for="exampleInputFile" class="col-md-3 control-label">File RAB</label>
                                             <?php echo ($proposal->p_file_rab == null) ? 'Belum Upload' : '<a href="'.base_url().$proposal->p_file_rab_path.'" target="__blank"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-file-text"></i>&nbsp;LIHAT</button></a>' ?>

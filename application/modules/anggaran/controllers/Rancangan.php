@@ -129,18 +129,29 @@ class Rancangan extends MX_controller
 		}
 	}
 
-	function set( $tahun = null )
+	function set( $tahun = '' )
 	{
-		if ($tahun == null) 
+		if ($tahun == '') 
 		{
 			$data['daftar'] = $this->db->query("SELECT * FROM anggaran_biaya_kegiatan INNER JOIN anggaran_master_kegiatan ON abk_amk_id = amk_id");
+
+			$data['selected'] = 0;
 		}
 		else
 		{
 			$data['daftar'] = $this->db->query("SELECT * FROM anggaran_biaya_kegiatan INNER JOIN anggaran_master_kegiatan ON abk_amk_id = amk_id WHERE abk_tahun = ".$tahun);
+
+			$data['selected'] = $tahun;
+		}
+
+		if($this->input->post('submit'))
+		{
+			redirect('anggaran/rancangan/set/'.$_POST['tahun']);
 		}
 
 		$data['jenis'] = $this->db->query('SELECT * FROM anggaran_master_kegiatan WHERE amk_is_deleted = 0');
+
+		$data['tahun'] = $this->db->query('SELECT DISTINCT abk_tahun AS TAHUN FROM anggaran_biaya_kegiatan');
 		
 		$this->load->view('set_view',$data);
 	}

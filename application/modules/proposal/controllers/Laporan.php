@@ -25,19 +25,19 @@ class Laporan extends MX_controller
 	{
 		switch ($_SESSION['roleId']) {
 			case '1':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 5');
+				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 8');
 				break;
 			
 			case '2':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id WHERE p_status = 5 AND p_u_id = '.$_SESSION['userId']);
+				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id WHERE p_status = 8 AND p_u_id = '.$_SESSION['userId']);
 				break;
 
 			case '3':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 5');
+				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 8');
 				break;
 
 			case '4':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 5');
+				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN laporan ON p_id = l_p_id INNER JOIN user ON p_u_id = u_id WHERE p_status = 8');
 				break;
 
 			case '5':

@@ -19,7 +19,7 @@ class Pengajuan extends MX_controller
 		
 	}
 
-	function daftar()
+	function daftar( $tahun = '' )
 	{
 		switch ($_SESSION['roleId']) {
 			case '1':

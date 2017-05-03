@@ -34,7 +34,7 @@
                         <div class="icon-bg bg-red"></div>
                     </i><span class="menu-title">Mata Anggaran</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="<?php echo site_url('anggaran/rancangan/jenis') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Jenis Anggaran</span></a></li>
+                            <li><a href="<?php echo site_url('anggaran/rancangan/jenis') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Master Mata Anggaran</span></a></li>
                             <li><a href="<?php echo site_url('anggaran/rancangan/set') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Set Anggaran</span></a></li>
                             <!--li><a href="<?php echo site_url('anggaran/rancangan/relasi') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Relasi Anggaran</span></a></li-->
                             <li><a href="<?php echo site_url('anggaran/realisasi/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Realisasi Anggaran</span></a></li>
@@ -52,7 +52,16 @@
                     </li>
                     <li><a href="#"><i class="fa fa-file-text-o">
                         <div class="icon-bg bg-violet"></div>
-                    </i><span class="menu-title">Manajemen Laporan</span><span class="fa arrow"></span></a>
+                    </i><span class="menu-title">Manajemen LPJ</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="<?php echo site_url('proposal/laporan/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Daftar</span></a></li>
+                            <!--li><a href="<?php echo site_url('invoice/paid') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Paid</span></a></li>
+                            </a></li-->
+                        </ul>
+                    </li>
+                    <li><a href="#"><i class="fa fa-file-text-o">
+                        <div class="icon-bg bg-red"></div>
+                    </i><span class="menu-title">Manajemen Pelaporan</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="<?php echo site_url('proposal/laporan/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Daftar</span></a></li>
                             <!--li><a href="<?php echo site_url('invoice/paid') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Paid</span></a></li>
@@ -89,7 +98,7 @@
                     </li>
                     <li><a href="#"><i class="fa fa-file-text-o">
                         <div class="icon-bg bg-violet"></div>
-                    </i><span class="menu-title">Manajemen Laporan</span><span class="fa arrow"></span></a>
+                    </i><span class="menu-title">Manajemen LPJ</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="<?php echo site_url('proposal/laporan/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Daftar</span></a></li>
                             <!--li><a href="<?php echo site_url('invoice/paid') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Paid</span></a></li>
@@ -135,7 +144,7 @@
                     </li>
                     <li><a href="#"><i class="fa fa-file-text-o">
                         <div class="icon-bg bg-violet"></div>
-                    </i><span class="menu-title">Manajemen Laporan</span><span class="fa arrow"></span></a>
+                    </i><span class="menu-title">Manajemen LPJ</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="<?php echo site_url('proposal/laporan/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Daftar</span></a></li>
                             <!--li><a href="<?php echo site_url('invoice/paid') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Paid</span></a></li>
