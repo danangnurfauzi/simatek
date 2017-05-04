@@ -54,6 +54,25 @@
                             <div class="panel-heading">Daftar Pengajuan Proposal</div>
                             <div class="panel-body">
                                 
+                                <form action="<?php echo current_url() ?>" method="post" class="form-horizontal">
+                                    <div class="form-body pal">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Filter Tahun</label>
+                                            <div class="col-md-6">
+                                                <select name="tahun" class="form-control" required>
+                                                    <option>------PILIH SALAH SATU------</option>
+                                                    <?php foreach($tahun->result() as $row) { ?>
+                                                        <option value="<?php echo $row->TAHUN ?>" <?php echo ($selected == $row->TAHUN) ? "selected='selected'" : "" ?>><?php echo $row->TAHUN ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                            <input type="submit" class="btn btn-primary" name="submit" value="SUBMIT">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
                                 <?php if($_SESSION['roleId'] != 5){ ?>
                                 <a href="<?php echo site_url('proposal/pengajuan/add') ?>" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Pengajuan Proposal</a><br/><br/>
                                 <?php } ?>
@@ -274,7 +293,13 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#tabel').DataTable();
+        $('#tabel').DataTable({
+            "dom": 'T<"clear">lfrtip',
+            "tableTools": {
+                "sSwfPath": "../../assets/vendors/DataTables/TableTools-2.2.4/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [ "xls", "pdf" , "print" ]
+            }
+        });
     } );
 </script>
 

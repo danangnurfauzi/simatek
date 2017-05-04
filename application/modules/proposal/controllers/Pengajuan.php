@@ -23,25 +23,92 @@ class Pengajuan extends MX_controller
 	{
 		switch ($_SESSION['roleId']) {
 			case '1':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id');
+				if($tahun == '')
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id');
+
+					$data['selected'] = 0;
+				}
+				else
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id WHERE YEAR(p_tanggal_mulai) = '.$tahun);
+
+					$data['selected'] = $tahun;
+				}
+				
 				break;
 			
 			case '2':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal WHERE p_u_id = '.$_SESSION['userId']);
+				if($tahun == '')
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal WHERE p_u_id = '.$_SESSION['userId']);
+
+					$data['selected'] = 0;
+				}
+				else
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal WHERE p_u_id = '.$_SESSION['userId'].' AND YEAR(p_tanggal_mulai) = '.$tahun);
+
+					$data['selected'] = $tahun;
+				}
+				
 				break;
 
 			case '3':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id');
+				if($tahun == '')
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id');
+
+					$data['selected'] = 0;
+				}
+				else
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id AND YEAR(p_tanggal_mulai) = '.$tahun);
+
+					$data['selected'] = $tahun;
+				}
+				
 				break;
 
 			case '4':
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id');
+				if($tahun == '')
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id');
+
+					$data['selected'] = 0;
+				}
+				else
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal INNER JOIN user ON p_u_id = u_id AND YEAR(p_tanggal_mulai) = '.$tahun);
+
+					$data['selected'] = $tahun;
+				}
+				
 				break;
 
 			case '5':
 				$idProdi = $this->db->query("SELECT * FROM user_auth WHERE ua_u_id = ".$_SESSION['userId'])->row()->ua_p_id;
-				$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN user_auth ON ua_u_id = p_u_id INNER JOIN user ON p_u_id = u_id WHERE ua_p_id = '.$idProdi);
+				if($tahun == '')
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN user_auth ON ua_u_id = p_u_id INNER JOIN user ON p_u_id = u_id WHERE ua_p_id = '.$idProdi);
+
+					$data['selected'] = 0;
+				}
+				else
+				{
+					$data['daftar'] = $this->db->query('SELECT * FROM proposal LEFT JOIN user_auth ON ua_u_id = p_u_id INNER JOIN user ON p_u_id = u_id WHERE ua_p_id = '.$idProdi.' AND YEAR(p_tanggal_mulai) = '.$tahun);
+
+					$data['selected'] = $tahun;
+				}
+				
 				break;
+		}
+
+		$data['tahun'] = $this->db->query('SELECT DISTINCT YEAR(p_tanggal_mulai) AS TAHUN FROM proposal');
+
+		if($this->input->post('submit'))
+		{
+			redirect('proposal/pengajuan/daftar/'.$_POST['tahun']);
 		}
 		
 		$this->load->view('daftar_view',$data);	

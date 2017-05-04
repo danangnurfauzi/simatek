@@ -59,13 +59,12 @@
                             </a></li-->
                         </ul>
                     </li>
-                    <li><a href="#"><i class="fa fa-file-text-o">
+                    <li><a href="#"><i class="fa fa-files-o">
                         <div class="icon-bg bg-red"></div>
                     </i><span class="menu-title">Manajemen Pelaporan</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="<?php echo site_url('proposal/laporan/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Daftar</span></a></li>
-                            <!--li><a href="<?php echo site_url('invoice/paid') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Paid</span></a></li>
-                            </a></li-->
+                            <li><a href="<?php echo site_url('pelaporan/anggaran/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Anggaran</span></a></li>
+                            <li><a href="<?php echo site_url('pelaporan/kegiatan/daftar') ?>"><i class="fa fa-angle-right"></i><span class="submenu-title">Kegiatan</span></a></li>
                         </ul>
                     </li>
                     <!--li><a href="#"><i class="fa fa-print">
