@@ -92,11 +92,11 @@
 
                             </div>
                         </div>
-
+                        <div style="text-align: center;"><img style="display: none;" src="http://ciptakarya.pu.go.id/sippa/v25/ws_assets/icon/loading.gif" id="loader"></div>
                         <div class="panel panel-blue" id="result" style="display: none;">
                             <div class="panel-heading">Hasil</div>
-                            <div class="panel-body">
-
+                            <div class="panel-body" id="tabel">
+                                
                             </div>
                         </div>
 
@@ -108,24 +108,27 @@
 <?php $this->load->view('templates/footer') ?>
 
 <script type="text/javascript">
-
+    
     $("#idForm").submit(function(e) {
-
+        $("#loader").show();
         var url = '<?php echo base_url() ?>pelaporan/anggaran/dataPost'; // the script where you handle the form input.
-
+        
         $.ajax({
                type: "POST",
                url: url,
                data: $("#idForm").serialize(), // serializes the form's elements.
                success: function(data)
                {
-                   alert(data); // show response from the php script.
+                    $("#loader").hide();
+                    $("#result").show();
+                    $("#tabel").html(data);
+                    //alert(data); // show response from the php script.
                }
              });
 
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
-    
+
 </script>
 
 </body>

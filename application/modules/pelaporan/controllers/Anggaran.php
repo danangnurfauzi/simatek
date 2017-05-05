@@ -123,9 +123,33 @@ class Anggaran extends MX_controller
 	}
 
 	public function dataPost()
-	{
-		echo "<pre>";
-		print_r($_POST);
+	{		
+
+		$query = 'SELECT YEAR(p_tanggal_mulai) AS TAHUN, amk_nama, u_nama, jk_nama, pma_angka FROM proposal INNER JOIN proposal_mata_anggaran ON pma_p_id = p_id INNER JOIN jenis_kegiatan ON jk_id = p_jk_id INNER JOIN user ON u_id = p_u_id INNER JOIN anggaran_master_kegiatan ON amk_id = pma_amk_id WHERE p_status = 8';
+
+		if ($_POST['tahun'] != '0') 
+		{
+			$query .= ' AND YEAR(p_tanggal_mulai) = '.$_POST['tahun'];
+		}
+
+		if ($_POST['mataAnggaran'] != '0') 
+		{
+			$query .= ' AND amk_id = '.$_POST['mataAnggaran'];
+		}
+
+		if ($_POST['lkm'] != '0') 
+		{
+			$query .= ' AND u_id = '.$_POST['lkm'];
+		}
+
+		if ($_POST['kegiatan'] != '0') 
+		{
+			$query .= ' AND jk_id = '.$_POST['kegiatan'];
+		}
+
+		$data['data'] = $this->db->query($query);
+
+		$this->load->view('pelaporan/anggaran/dataPost_view',$data);
 	}
 	
 }
